@@ -2,6 +2,16 @@ import * as React from "react";
 import "./App.css";
 import axiosInstance from "./axios";
 
+const APIKeyInput = () => {
+  return (
+    <>
+      <label htmlFor="apikey">Insira sua chave para API:</label>
+      <input type="text" name="apikey" />
+      <input type="submit" value="Entrar" />
+    </>
+  );
+};
+
 function App() {
   const getCountries = () => {
     const _getCountries = async () => {
@@ -22,6 +32,7 @@ function App() {
   return (
     <>
       <h1>API-Football</h1>
+      <APIKeyInput />
     </>
   );
 }
