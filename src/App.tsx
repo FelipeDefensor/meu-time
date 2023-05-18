@@ -13,7 +13,7 @@ const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
   };
   return (
     <form onSubmit={onSubmit}>
-      <label htmlFor="apiKey">Insira sua chave para API:</label>
+      <label htmlFor="apiKey">Insira sua chave para a API:</label>
       <input type="text" name="apiKey" />
       <input type="submit" value="Entrar" />
     </form>
@@ -21,29 +21,23 @@ const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
 };
 
 const App = () => {
-  const [apiKey, setApiKey] = React.useState("");
-
-  const getCountries = () => {
-    const _getCountries = async () => {
-      try {
-        const response = await axiosInstance.get("countries");
-        console.log(response);
-      } catch (err) {
-        if (err.response.status == 403) {
-          console.log("Chave da API inválida.");
-        }
-        console.log(err);
+  const getCountries = async () => {
+    try {
+      const response = await axiosInstance.get("countries");
+      console.log(response);
+    } catch (err) {
+      if (err.response.status == 403) {
+        console.log("Chave da API inválida.");
       }
-    };
-    _getCountries();
+      console.log(err);
+    }
   };
 
   const onApiKeySubmit = (key: string) => {
-    console.log(key);
-    setApiKey(key);
+    axiosInstance.defaults.headers["X-RapidAPI-Key"] = key;
+    getCountries();
   };
 
-  React.useEffect(getCountries, []);
   return (
     <>
       <h1>API-Football</h1>
