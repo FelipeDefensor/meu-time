@@ -2,17 +2,27 @@ import * as React from "react";
 import "./App.css";
 import axiosInstance from "./axios";
 
-const APIKeyInput = () => {
+type APIKeyInputProps = {
+  handleSubmit: (key: string) => void;
+};
+
+const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit(event.currentTarget.elements.apiKey.value);
+  };
   return (
-    <>
-      <label htmlFor="apikey">Insira sua chave para API:</label>
-      <input type="text" name="apikey" />
+    <form onSubmit={onSubmit}>
+      <label htmlFor="apiKey">Insira sua chave para API:</label>
+      <input type="text" name="apiKey" />
       <input type="submit" value="Entrar" />
-    </>
+    </form>
   );
 };
 
-function App() {
+const App() {
+  const [apiKey, setApiKey] = React.useState("");
+
   const getCountries = () => {
     const _getCountries = async () => {
       try {
@@ -28,11 +38,16 @@ function App() {
     _getCountries();
   };
 
+  const onApiKeySubmit = (key: string) => {
+    console.log(key);
+    setApiKey(key);
+  };
+
   React.useEffect(getCountries, []);
   return (
     <>
       <h1>API-Football</h1>
-      <APIKeyInput />
+      <APIKeyInput handleSubmit={onApiKeySubmit} />
     </>
   );
 }
