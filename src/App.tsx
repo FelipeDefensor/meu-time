@@ -20,7 +20,7 @@ const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
   );
 };
 
-const App() {
+const App = () => {
   const [apiKey, setApiKey] = React.useState("");
 
   const getCountries = () => {
@@ -50,6 +50,6 @@ const App() {
       <APIKeyInput handleSubmit={onApiKeySubmit} />
     </>
   );
-}
+};
 
 export default App;
