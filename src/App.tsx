@@ -2,6 +2,12 @@ import * as React from "react";
 import "./App.css";
 import axiosInstance from "./axios";
 
+type Country = {
+  name: string;
+  code: string;
+  flag: string;
+};
+
 type APIKeyInputProps = {
   handleSubmit: (key: string) => void;
 };
@@ -21,10 +27,11 @@ const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
 };
 
 const App = () => {
-  const getCountries = async () => {
+  const [countries, setCountries] = React.useState<Country[]>([]);
+  const fetchCountries = async () => {
     try {
       const response = await axiosInstance.get("countries");
-      console.log(response);
+      setCountries(response);
     } catch (err) {
       if (err.response.status == 403) {
         console.log("Chave da API inválida.");
@@ -35,7 +42,7 @@ const App = () => {
 
   const onApiKeySubmit = (key: string) => {
     axiosInstance.defaults.headers["X-RapidAPI-Key"] = key;
-    getCountries();
+    fetchCountries();
   };
 
   return (
