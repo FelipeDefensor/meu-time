@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { APIKeyInput } from "./App";
+import { APIKeyInput, CountrySelectBox } from "./App";
 
 describe("APIKeyInput", () => {
   it("renders input and submit button", () => {
@@ -30,6 +30,34 @@ describe("APIKeyInput", () => {
     await waitFor(() => {
       expect(apiInput).toHaveValue("test key");
       expect(onSubmitMock).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe("SelectBox", () => {
+  it("renders with the correct options", () => {
+    const countries = [
+      {
+        name: "Brasil",
+        code: "BR",
+        flag: "",
+      },
+      {
+        name: "Argentina",
+        code: "AR",
+        flag: "",
+      },
+      {
+        name: "Uruguai",
+        code: "UR",
+        flag: "",
+      },
+    ];
+
+    render(<CountrySelectBox countries={countries} />);
+
+    countries.forEach((country) => {
+      expect(screen.getByText(country.name)).toBeInTheDocument();
     });
   });
 });

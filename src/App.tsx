@@ -33,6 +33,25 @@ const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
   );
 };
 
+type CountrySelectBoxProps = {
+  countries: Country[];
+};
+
+const CountrySelectBox = ({ countries }: CountrySelectBoxProps) => {
+  return (
+    <>
+      <label htmlFor="countrySelect">Selecione o país:</label>
+      <select id="countrySelect">
+        {countries.map((country) => (
+          <option key={country.code} value={country.code}>
+            {country.name}
+          </option>
+        ))}
+      </select>
+    </>
+  );
+};
+
 const App = () => {
   const [countries, setCountries] = React.useState<Country[]>([]);
   const fetchCountries = async () => {
@@ -66,4 +85,4 @@ const App = () => {
 };
 
 export default App;
-export { APIKeyInput };
+export { APIKeyInput, CountrySelectBox };
