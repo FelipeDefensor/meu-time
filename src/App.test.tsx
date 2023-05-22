@@ -70,6 +70,6 @@ describe("SelectBox", () => {
     await user.click(screen.getByRole("button"));
 
     expect(handleSubmit).toHaveBeenCalledTimes(1);
-    expect(handleSubmit).toHaveBeenCalledWith("UR");
+    expect(handleSubmit).toHaveBeenCalledWith("Uruguai");
   });
 });

@@ -54,7 +54,7 @@ const CountrySelectBox = ({ countries, handleSubmit }: CountrySelectBoxProps) =>
       <label htmlFor="countrySelect">Selecione o país:</label>
       <select id="countrySelect" name="country">
         {countries.map((country) => (
-          <option key={country.code} value={country.code}>
+          <option key={country.name} value={country.name}>
             {country.name}
           </option>
         ))}
