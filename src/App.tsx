@@ -2,70 +2,13 @@ import * as React from "react";
 import "./App.css";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
-
-type Country = {
-  name: string;
-  code: string;
-  flag: string;
-};
-
-type APIKeyInputProps = {
-  handleSubmit: (key: string) => void;
-};
-
-const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const input = form.elements.namedItem("apiKey") as HTMLInputElement;
-    if (!input) {
-      throw new Error("apiKey input not found");
-    }
-    const value = input.value;
-    handleSubmit(value);
-  };
-  return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="apiKey">Insira sua chave para a API:</label>
-      <input type="text" name="apiKey" />
-      <input type="submit" value="Entrar" />
-    </form>
-  );
-};
-
-type CountrySelectBoxProps = {
-  countries: Country[];
-  handleSubmit: (key: string) => void;
-};
-
-const CountrySelectBox = ({ countries, handleSubmit }: CountrySelectBoxProps) => {
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const select = event.currentTarget.elements.namedItem("country") as HTMLSelectElement;
-    if (!select) {
-      throw new Error("country select box not found");
-    }
-    const value = select.value;
-    handleSubmit(value);
-  };
-
-  return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="countrySelect">Selecione o país:</label>
-      <select id="countrySelect" name="country">
-        {countries.map((country) => (
-          <option key={country.name} value={country.name}>
-            {country.name}
-          </option>
-        ))}
-      </select>
-      <input type="submit" value="Escolher" />
-    </form>
-  );
-};
+import APIKeyInput from "./APIKeyInput";
+import { Country } from "./types";
+import CountrySelectBox from "./CountrySelectBox";
 
 const App = () => {
   const [countries, setCountries] = React.useState<Country[]>([]);
+
   const fetchCountries = async () => {
     try {
       const res = await axiosInstance.get("countries");
@@ -119,4 +62,3 @@ const App = () => {
 };
 
 export default App;
-export { APIKeyInput, CountrySelectBox };
