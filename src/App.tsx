@@ -80,6 +80,7 @@ const App = () => {
     <>
       <h1>API-Football</h1>
       <APIKeyInput handleSubmit={onApiKeySubmit} />
+      {countries.length ? <CountrySelectBox countries={countries} /> : null}
     </>
   );
 };
