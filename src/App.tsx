@@ -43,6 +43,10 @@ const App = () => {
       const err = _err as AxiosError;
       if (err.response?.status == 403) {
         console.log("Chave da API inválida.");
+      } else if (err.response?.status == 499) {
+        console.log("Tempo para a requisição esgotado.");
+      } else if (err.response?.status == 500) {
+        console.log("Erro no servidor.");
       }
       console.log(err);
     }
