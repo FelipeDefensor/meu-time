@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./App.css";
 import axiosInstance from "./axios";
+import { AxiosError } from "axios";
 
 type Country = {
   name: string;
@@ -38,8 +39,9 @@ const App = () => {
     try {
       const res = await axiosInstance.get("countries");
       setCountries(res.data.response);
-    } catch (err) {
-      if (err.response.status == 403) {
+    } catch (_err) {
+      const err = _err as AxiosError;
+      if (err.response?.status == 403) {
         console.log("Chave da API inválida.");
       }
       console.log(err);
