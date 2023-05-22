@@ -36,8 +36,8 @@ const App = () => {
   const [countries, setCountries] = React.useState<Country[]>([]);
   const fetchCountries = async () => {
     try {
-      const response = await axiosInstance.get("countries");
-      setCountries(response);
+      const res = await axiosInstance.get("countries");
+      setCountries(res.data.response);
     } catch (err) {
       if (err.response.status == 403) {
         console.log("Chave da API inválida.");
