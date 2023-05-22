@@ -83,6 +83,25 @@ const App = () => {
     }
   };
 
+  const fetchLeagues = async (country: string) => {
+    try {
+      const res = await axiosInstance.get("leagues", {
+        params: {
+          country: country,
+        },
+      });
+      console.log(res.data.response);
+    } catch (_err) {
+      const err = _err as AxiosError;
+      if (err.response?.status == 499) {
+        console.log("Tempo para a requisição esgotado.");
+      } else if (err.response?.status == 500) {
+        console.log("Erro no servidor.");
+      }
+      console.log(err);
+    }
+  };
+
   const onApiKeySubmit = (key: string) => {
     axiosInstance.defaults.headers["X-RapidAPI-Key"] = key;
     fetchCountries();
@@ -93,7 +112,7 @@ const App = () => {
       <h1>API-Football</h1>
       <APIKeyInput handleSubmit={onApiKeySubmit} />
       {countries.length ? (
-        <CountrySelectBox countries={countries} handleSubmit={(c) => console.log(c)} />
+        <CountrySelectBox countries={countries} handleSubmit={fetchLeagues} />
       ) : null}
     </>
   );
