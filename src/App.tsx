@@ -3,8 +3,9 @@ import "./App.css";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 import APIKeyInput from "./APIKeyInput";
-import { Country } from "./types";
+import { Country, League, LeagueDetail } from "./types";
 import CountrySelectBox from "./CountrySelectBox";
+import LeagueSelectBox from "./LeagueSelectBox";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -17,6 +18,7 @@ const handleAPIError = (error: AxiosError) => {
 
 const App = () => {
   const [countries, setCountries] = React.useState<Country[]>([]);
+  const [leagues, setLeagues] = React.useState<League[]>([]);
 
   const fetchCountries = async () => {
     try {
@@ -30,6 +32,14 @@ const App = () => {
     }
   };
 
+  const getLeaguesFromResponse = (leagueDetails: LeagueDetail[]): League[] => {
+    let leagues: League[] = [];
+    for (let i in leagueDetails) {
+      leagues.push(leagueDetails[i].league);
+    }
+    return leagues;
+  };
+
   const fetchLeagues = async (country: string) => {
     try {
       const res = await axiosInstance.get("leagues", {
@@ -37,7 +47,8 @@ const App = () => {
           country: country,
         },
       });
-      console.log(res.data.response);
+      const leagues = getLeaguesFromResponse(res.data.response);
+      setLeagues(leagues);
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -55,6 +66,7 @@ const App = () => {
       {countries.length ? (
         <CountrySelectBox countries={countries} handleSubmit={fetchLeagues} />
       ) : null}
+      {leagues.length ? <LeagueSelectBox leagues={leagues} handleSubmit={() => {}} /> : null}
     </>
   );
 };

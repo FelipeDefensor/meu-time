@@ -4,4 +4,22 @@ type Country = {
   flag: string;
 };
 
-export type { Country };
+type League = {
+  name: string;
+  type: string;
+  logo: string;
+};
+
+type Season = {
+  year: number;
+  start: string;
+  end: string;
+};
+
+type LeagueDetail = {
+  country: Country;
+  league: League;
+  seasons: Season[];
+};
+
+export type { Country, League, LeagueDetail };
