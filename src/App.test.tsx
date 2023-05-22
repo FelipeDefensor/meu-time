@@ -35,29 +35,41 @@ describe("APIKeyInput", () => {
 });
 
 describe("SelectBox", () => {
-  it("renders with the correct options", () => {
-    const countries = [
-      {
-        name: "Brasil",
-        code: "BR",
-        flag: "",
-      },
-      {
-        name: "Argentina",
-        code: "AR",
-        flag: "",
-      },
-      {
-        name: "Uruguai",
-        code: "UR",
-        flag: "",
-      },
-    ];
+  const countries = [
+    {
+      name: "Brasil",
+      code: "BR",
+      flag: "",
+    },
+    {
+      name: "Argentina",
+      code: "AR",
+      flag: "",
+    },
+    {
+      name: "Uruguai",
+      code: "UR",
+      flag: "",
+    },
+  ];
 
-    render(<CountrySelectBox countries={countries} />);
+  it("renders with the correct options", () => {
+    render(<CountrySelectBox countries={countries} handleSubmit={() => {}} />);
 
     countries.forEach((country) => {
       expect(screen.getByText(country.name)).toBeInTheDocument();
     });
+  });
+
+  it("submits selected option", async () => {
+    const handleSubmit = vi.fn();
+    const user = userEvent.setup();
+    render(<CountrySelectBox countries={countries} handleSubmit={handleSubmit} />);
+
+    await user.selectOptions(screen.getByRole("combobox"), "Uruguai");
+    await user.click(screen.getByRole("button"));
+
+    expect(handleSubmit).toHaveBeenCalledTimes(1);
+    expect(handleSubmit).toHaveBeenCalledWith("UR");
   });
 });

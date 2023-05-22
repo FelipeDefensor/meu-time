@@ -35,20 +35,32 @@ const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
 
 type CountrySelectBoxProps = {
   countries: Country[];
+  handleSubmit: (key: string) => void;
 };
 
-const CountrySelectBox = ({ countries }: CountrySelectBoxProps) => {
+const CountrySelectBox = ({ countries, handleSubmit }: CountrySelectBoxProps) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const select = event.currentTarget.elements.namedItem("country") as HTMLSelectElement;
+    if (!select) {
+      throw new Error("country select box not found");
+    }
+    const value = select.value;
+    handleSubmit(value);
+  };
+
   return (
-    <>
+    <form onSubmit={onSubmit}>
       <label htmlFor="countrySelect">Selecione o país:</label>
-      <select id="countrySelect">
+      <select id="countrySelect" name="country">
         {countries.map((country) => (
           <option key={country.code} value={country.code}>
             {country.name}
           </option>
         ))}
       </select>
-    </>
+      <input type="submit" value="Escolher" />
+    </form>
   );
 };
 
@@ -80,7 +92,9 @@ const App = () => {
     <>
       <h1>API-Football</h1>
       <APIKeyInput handleSubmit={onApiKeySubmit} />
-      {countries.length ? <CountrySelectBox countries={countries} /> : null}
+      {countries.length ? (
+        <CountrySelectBox countries={countries} handleSubmit={(c) => console.log(c)} />
+      ) : null}
     </>
   );
 };
