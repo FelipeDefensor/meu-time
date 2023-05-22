@@ -15,7 +15,13 @@ type APIKeyInputProps = {
 const APIKeyInput = ({ handleSubmit }: APIKeyInputProps) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSubmit(event.currentTarget.elements.apiKey.value);
+    const form = event.currentTarget;
+    const input = form.elements.namedItem("apiKey") as HTMLInputElement;
+    if (!input) {
+      throw new Error("apiKey input not found");
+    }
+    const value = input.value;
+    handleSubmit(value);
   };
   return (
     <form onSubmit={onSubmit}>
