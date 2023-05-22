@@ -6,6 +6,15 @@ import APIKeyInput from "./APIKeyInput";
 import { Country } from "./types";
 import CountrySelectBox from "./CountrySelectBox";
 
+const handleAPIError = (error: AxiosError) => {
+  if (error.response?.status == 499) {
+    console.log("Tempo para a requisição esgotado.");
+  } else if (error.response?.status == 500) {
+    console.log("Erro no servidor.");
+  }
+  console.log(error);
+};
+
 const App = () => {
   const [countries, setCountries] = React.useState<Country[]>([]);
 
@@ -17,12 +26,7 @@ const App = () => {
       const err = _err as AxiosError;
       if (err.response?.status == 403) {
         console.log("Chave da API inválida.");
-      } else if (err.response?.status == 499) {
-        console.log("Tempo para a requisição esgotado.");
-      } else if (err.response?.status == 500) {
-        console.log("Erro no servidor.");
-      }
-      console.log(err);
+      } else handleAPIError(err);
     }
   };
 
@@ -34,14 +38,8 @@ const App = () => {
         },
       });
       console.log(res.data.response);
-    } catch (_err) {
-      const err = _err as AxiosError;
-      if (err.response?.status == 499) {
-        console.log("Tempo para a requisição esgotado.");
-      } else if (err.response?.status == 500) {
-        console.log("Erro no servidor.");
-      }
-      console.log(err);
+    } catch (err) {
+      handleAPIError(err as AxiosError);
     }
   };
 
