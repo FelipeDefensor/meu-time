@@ -89,4 +89,14 @@ type GoalsFor = {
   minute: CountByMinutes;
 };
 
-export type { Country, League, LeagueDetail, Team, TeamDetail, Player, Fixtures, GoalsFor };
+export type {
+  Country,
+  League,
+  LeagueDetail,
+  Team,
+  TeamDetail,
+  Player,
+  Fixtures,
+  GoalsFor,
+  CountByMinutes,
+};

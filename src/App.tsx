@@ -4,6 +4,7 @@ import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 import APIKeyInput from "./APIKeyInput";
 import {
+  CountByMinutes,
   Country,
   Fixtures,
   GoalsFor,
@@ -16,6 +17,7 @@ import {
 import SelectBox from "./SelectBox";
 import PlayerList from "./PlayersList";
 import WinLossTable from "./WinLossTable";
+import GoalsChart from "./GoalsChart";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -204,7 +206,10 @@ const App = () => {
       </div>
       <div style={{ display: "flex", gap: "30px", justifyContent: "center" }}>
         <span>{players.length ? <PlayerList players={players} /> : null}</span>
-        <span>{fixtures ? <WinLossTable fixtures={fixtures} /> : null}</span>
+        <span>
+          {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
+          {goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}
+        </span>
       </div>
     </>
   );
