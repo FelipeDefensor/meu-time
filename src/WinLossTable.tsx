@@ -5,7 +5,7 @@ type WinLossTableProps = {
 };
 
 const WinLossTable = ({ fixtures }: WinLossTableProps) => (
-  <table>
+  <table className="table table-striped table-bordered text-center">
     <thead>
       <tr>
         <th></th>
@@ -23,7 +23,7 @@ const WinLossTable = ({ fixtures }: WinLossTableProps) => (
         <td>{fixtures.played.away}</td>
         <td>{fixtures.played.total}</td>
       </tr>
-      <tr>
+      <tr className="table-success">
         <td>
           <strong>Wins</strong>
         </td>
@@ -31,7 +31,7 @@ const WinLossTable = ({ fixtures }: WinLossTableProps) => (
         <td>{fixtures.wins.away}</td>
         <td>{fixtures.wins.total}</td>
       </tr>
-      <tr>
+      <tr className="table-warning">
         <td>
           <strong>Draws</strong>
         </td>
@@ -39,7 +39,7 @@ const WinLossTable = ({ fixtures }: WinLossTableProps) => (
         <td>{fixtures.draws.away}</td>
         <td>{fixtures.draws.total}</td>
       </tr>
-      <tr>
+      <tr className="table-danger">
         <td>
           <strong>Losses</strong>
         </td>
