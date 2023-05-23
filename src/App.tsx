@@ -30,11 +30,9 @@ const handleAPIError = (error: AxiosError) => {
 
 const App = () => {
   const [countryNames, setCountryNames] = React.useState<string[]>([]);
+  const [countryToFlag, setCountryToFlag] = React.useState<Record<string, string>>({});
   const [leagueNames, setLeagueNames] = React.useState<string[]>([]);
-
-  const [leagueToSeasonYears, setLeagueToSeasonYears] = React.useState<Record<string, string[]>>(
-    {}
-  );
+  const [leagueToYears, setLeagueToYears] = React.useState<Record<string, string[]>>({});
   const [leagueToId, setLeagueToId] = React.useState<Record<string, number>>({});
   const [seasonYears, setSeasonYears] = React.useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = React.useState<string>("");
@@ -51,6 +49,7 @@ const App = () => {
     try {
       const res = await axiosInstance.get("countries");
       setCountryNames(res.data.response.map((c: Country) => c.name));
+      setCountryToFlag(getCountryToFlag(res.data.response));
     } catch (_err) {
       const err = _err as AxiosError;
       if (err.response?.status == 403) {
@@ -76,6 +75,16 @@ const App = () => {
     }
     console.log(leagueToSeasonYears);
     return leagueToSeasonYears;
+  };
+
+  const getCountryToFlag = (countries: Country[]) => {
+    let countryToFlag: Record<string, string> = {};
+    for (let i in countries) {
+      let name = countries[i].name;
+      let code = countries[i].flag;
+      countryToFlag[name] = code;
+    }
+    return countryToFlag;
   };
 
   const getLeagueToId = (leagueDetails: LeagueDetail[]): Record<string, number> => {
@@ -108,7 +117,7 @@ const App = () => {
       const leagues = getLeagues(res.data.response);
       setSelectedCountry(country);
       setLeagueNames(leagues.map((l: League) => l.name));
-      setLeagueToSeasonYears(getLeagueToSeasonYears(res.data.response));
+      setLeagueToYears(getLeagueToSeasonYears(res.data.response));
       setLeagueToId(getLeagueToId(res.data.response));
     } catch (err) {
       handleAPIError(err as AxiosError);
@@ -117,7 +126,7 @@ const App = () => {
 
   const handleLeagueSubmit = (league: string) => {
     setSelectedLeague(leagueToId[league]);
-    setSeasonYears(leagueToSeasonYears[league]);
+    setSeasonYears(leagueToYears[league]);
   };
 
   const handleSeasonSubmit = async (year: string) => {
@@ -220,7 +229,11 @@ const App = () => {
         ) : null}
       </div>
       <div style={{ display: "flex", gap: "30px", justifyContent: "center" }}>
-        <span>{players.length ? <PlayerList players={players} /> : null}</span>
+        <span>
+          {players.length ? (
+            <PlayerList players={players} getFlagUrl={(c: string) => countryToFlag[c]} />
+          ) : null}
+        </span>
         <span>
           {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
           {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}

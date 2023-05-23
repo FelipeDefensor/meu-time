@@ -3,9 +3,10 @@ import { Player } from "./types";
 
 type PlayerListProps = {
   players: Pick<Player, "name" | "age" | "nationality" | "photo">[];
+  getFlagUrl: (country: string) => string;
 };
 
-const PlayerList: React.FC<PlayerListProps> = ({ players }) => (
+const PlayerList: React.FC<PlayerListProps> = ({ players, getFlagUrl }) => (
   <table className="table table-hover align-middle">
     <thead>
       <tr>
@@ -20,14 +21,15 @@ const PlayerList: React.FC<PlayerListProps> = ({ players }) => (
         <tr key={index} className="align-items-center">
           <td>{player.name}</td>
           <td>{player.age}</td>
-          <td>{player.nationality}</td>
           <td>
             <img
-              src={player.photo}
+              src={getFlagUrl(player.nationality)}
               alt={player.name}
-              className="img-thumbnail"
-              style={{ width: "50px", height: "50px" }}
+              style={{ width: "30px", height: "30px" }}
             />
+          </td>
+          <td>
+            <img src={player.photo} alt={player.name} style={{ width: "50px", height: "50px" }} />
           </td>
         </tr>
       ))}
