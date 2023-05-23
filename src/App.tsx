@@ -15,6 +15,7 @@ import {
 } from "./types";
 import SelectBox from "./SelectBox";
 import PlayerList from "./PlayersList";
+import WinLossTable from "./WinLossTable";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -145,7 +146,6 @@ const App = () => {
           season: selectedYear,
         },
       });
-      debugger;
       setPlayers(res.data.response.map((x: { player: Player; statistics: object }) => x.player));
     } catch (err) {
       handleAPIError(err as AxiosError);
@@ -160,8 +160,8 @@ const App = () => {
         },
       });
       setMostUsedFormation(res.data.response.lineups[0]);
-      setFixtures(res.data.fixtures);
-      setGoalsFor(res.data.goals.for);
+      setFixtures(res.data.response.fixtures);
+      setGoalsFor(res.data.response.goals.for);
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -202,7 +202,10 @@ const App = () => {
           />
         ) : null}
       </div>
-      <div>{players.length ? <PlayerList players={players} /> : null}</div>
+      <div style={{ display: "flex", gap: "30px", justifyContent: "center" }}>
+        <span>{players.length ? <PlayerList players={players} /> : null}</span>
+        <span>{fixtures ? <WinLossTable fixtures={fixtures} /> : null}</span>
+      </div>
     </>
   );
 };
