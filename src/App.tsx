@@ -19,6 +19,9 @@ const handleAPIError = (error: AxiosError) => {
 const App = () => {
   const [countries, setCountries] = React.useState<Country[]>([]);
   const [leagues, setLeagues] = React.useState<League[]>([]);
+  const [leagueToSeasonYears, setLeagueToSeasonYears] = React.useState<Record<string, number[]>>(
+    {}
+  );
 
   const fetchCountries = async () => {
     try {
@@ -40,6 +43,17 @@ const App = () => {
     return leagues;
   };
 
+  const getLeagueToSeasonYears = (leagueDetails: LeagueDetail[]): Record<string, number[]> => {
+    let leagueToSeasonYears: Record<string, number[]> = {};
+    for (let i in leagueDetails) {
+      let leagueName = leagueDetails[i].league.name;
+      let seasonYears = leagueDetails[i].seasons.map((l) => l.year);
+      leagueToSeasonYears[leagueName] = seasonYears;
+    }
+    console.log(leagueToSeasonYears);
+    return leagueToSeasonYears;
+  };
+
   const fetchLeagues = async (country: string) => {
     try {
       const res = await axiosInstance.get("leagues", {
@@ -49,6 +63,7 @@ const App = () => {
       });
       const leagues = getLeaguesFromResponse(res.data.response);
       setLeagues(leagues);
+      setLeagueToSeasonYears(getLeagueToSeasonYears(res.data.response));
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
