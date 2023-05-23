@@ -22,6 +22,9 @@ const App = () => {
     {}
   );
   const [seasonYears, setSeasonYears] = React.useState<string[]>([]);
+  const [selectedCountry, setSelectedCountry] = React.useState<string>("");
+  const [selectedLeague, setSelectedLeague] = React.useState<string>("");
+  const [selectedYear, setSelectedYear] = React.useState<string>("");
 
   const fetchCountries = async () => {
     try {
@@ -54,7 +57,7 @@ const App = () => {
     return leagueToSeasonYears;
   };
 
-  const fetchLeagues = async (country: string) => {
+  const selectCountry = async (country: string) => {
     try {
       const res = await axiosInstance.get("leagues", {
         params: {
@@ -62,6 +65,7 @@ const App = () => {
         },
       });
       const leagues = getLeagues(res.data.response);
+      setSelectedCountry(country);
       setLeagueNames(leagues.map((l: League) => l.name));
       setLeagueToSeasonYears(getLeagueToSeasonYears(res.data.response));
     } catch (err) {
@@ -69,7 +73,8 @@ const App = () => {
     }
   };
 
-  const displaySeasonYears = (league: string) => {
+  const selectLeague = (league: string) => {
+    setSelectedLeague(league);
     setSeasonYears(leagueToSeasonYears[league]);
   };
 
@@ -86,15 +91,11 @@ const App = () => {
         <SelectBox
           options={countryNames}
           prompt={"Selecione o país:"}
-          handleSubmit={fetchLeagues}
+          handleSubmit={selectCountry}
         />
       ) : null}
       {leagueNames.length ? (
-        <SelectBox
-          options={leagueNames}
-          prompt={"Selecione a liga:"}
-          handleSubmit={displaySeasonYears}
-        />
+        <SelectBox options={leagueNames} prompt={"Selecione a liga:"} handleSubmit={selectLeague} />
       ) : null}
       {seasonYears.length ? (
         <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={() => {}} />
