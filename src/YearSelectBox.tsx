@@ -18,7 +18,7 @@ const YearSelectBox = ({ years, handleSubmit }: YearSelectBoxProps) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <label htmlFor="yearSelect">Selecione o país:</label>
+      <label htmlFor="yearSelect">Selecione a temporada:</label>
       <select id="yearSelect" name="year">
         {years.map((year) => (
           <option key={year} value={year}>
