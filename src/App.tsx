@@ -176,23 +176,33 @@ const App = () => {
     <>
       <h1>API-Football</h1>
       <APIKeyInput handleSubmit={onApiKeySubmit} />
-      {countryNames.length ? (
-        <SelectBox
-          options={countryNames}
-          prompt={"Selecione o país:"}
-          handleSubmit={selectCountry}
-        />
-      ) : null}
-      {leagueNames.length ? (
-        <SelectBox options={leagueNames} prompt={"Selecione a liga:"} handleSubmit={selectLeague} />
-      ) : null}
-      {seasonYears.length ? (
-        <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={selectYear} />
-      ) : null}
-      {teamNames.length ? (
-        <SelectBox options={teamNames} prompt="Selecione o time:" handleSubmit={handleTeamSubmit} />
-      ) : null}
-      {players.length ? <PlayerList players={players} /> : null}
+      <div>
+        {countryNames.length ? (
+          <SelectBox
+            options={countryNames}
+            prompt={"Selecione o país:"}
+            handleSubmit={selectCountry}
+          />
+        ) : null}
+        {leagueNames.length ? (
+          <SelectBox
+            options={leagueNames}
+            prompt={"Selecione a liga:"}
+            handleSubmit={selectLeague}
+          />
+        ) : null}
+        {seasonYears.length ? (
+          <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={selectYear} />
+        ) : null}
+        {teamNames.length ? (
+          <SelectBox
+            options={teamNames}
+            prompt="Selecione o time:"
+            handleSubmit={handleTeamSubmit}
+          />
+        ) : null}
+      </div>
+      <div>{players.length ? <PlayerList players={players} /> : null}</div>
     </>
   );
 };
