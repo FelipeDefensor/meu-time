@@ -82,6 +82,11 @@ type GoalsFor = {
   minute: CountByMinutes;
 };
 
+type Formation = {
+  formation: string;
+  played: number;
+};
+
 export type {
   Country,
   League,
@@ -93,4 +98,5 @@ export type {
   GoalsFor,
   CountByMinutes,
   Minutes,
+  Formation,
 };

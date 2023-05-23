@@ -7,6 +7,7 @@ import {
   CountByMinutes,
   Country,
   Fixtures,
+  Formation,
   GoalsFor,
   League,
   LeagueDetail,
@@ -18,6 +19,7 @@ import SelectBox from "./SelectBox";
 import PlayerList from "./PlayersList";
 import WinLossTable from "./WinLossTable";
 import GoalsChart from "./GoalsChart";
+import MostUsedFormation from "./MostUsedFormation";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -45,7 +47,7 @@ const App = () => {
   const [teamNames, setTeamNames] = React.useState<string[]>([]);
   const [teamNameToId, setTeamNameToId] = React.useState<Record<string, number>>({});
   const [players, setPlayers] = React.useState<Player[]>([]);
-  const [mostUsedFormation, setMostUsedFormation] = React.useState("");
+  const [mostUsedFormation, setMostUsedFormation] = React.useState<Formation | null>(null);
   const [fixtures, setFixtures] = React.useState<Fixtures | null>(null);
   const [goalsFor, setGoalsFor] = React.useState<GoalsFor | null>(null);
 
@@ -208,6 +210,7 @@ const App = () => {
         <span>{players.length ? <PlayerList players={players} /> : null}</span>
         <span>
           {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
+          {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
           {goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}
         </span>
       </div>
