@@ -45,6 +45,13 @@ type Player = {
   number: number;
   photo: string;
   position: string;
+  nationality: string;
+  firstname: string;
+  lastname: string;
+  height: number;
+  weight: number;
+  injured: boolean;
+  birth: object;
 };
 
 type HomeAwayCount = {

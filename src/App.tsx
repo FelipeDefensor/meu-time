@@ -3,8 +3,18 @@ import "./App.css";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 import APIKeyInput from "./APIKeyInput";
-import { Country, Fixtures, GoalsFor, League, LeagueDetail, Player, Team, TeamDetail } from "./types";
+import {
+  Country,
+  Fixtures,
+  GoalsFor,
+  League,
+  LeagueDetail,
+  Player,
+  Team,
+  TeamDetail,
+} from "./types";
 import SelectBox from "./SelectBox";
+import PlayerList from "./PlayersList";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -119,7 +129,6 @@ const App = () => {
         },
       });
       setSelectedYear(parseInt(year));
-      debugger;
       setTeamNames(res.data.response.map((x: TeamDetail) => x.team.name));
       setTeamNameToId(getTeamNameToId(res.data.response));
     } catch (err) {
@@ -129,12 +138,15 @@ const App = () => {
 
   const handleTeamSubmit = async (team: string) => {
     try {
-      const res = await axiosInstance.get("players/squads", {
+      const res = await axiosInstance.get("players", {
         params: {
           team: teamNameToId[team],
+          league: selectedLeague,
+          season: selectedYear,
         },
       });
-      setPlayers(res.data.response.players);
+      debugger;
+      setPlayers(res.data.response.map((x: { player: Player; statistics: object }) => x.player));
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -143,6 +155,8 @@ const App = () => {
       const res = await axiosInstance.get("teams/statistics", {
         params: {
           team: teamNameToId[team],
+          league: selectedLeague,
+          season: selectedYear,
         },
       });
       setMostUsedFormation(res.data.response.lineups[0]);
@@ -178,6 +192,7 @@ const App = () => {
       {teamNames.length ? (
         <SelectBox options={teamNames} prompt="Selecione o time:" handleSubmit={handleTeamSubmit} />
       ) : null}
+      {players.length ? <PlayerList players={players} /> : null}
     </>
   );
 };
