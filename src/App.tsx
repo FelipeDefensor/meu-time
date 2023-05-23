@@ -102,7 +102,7 @@ const App = () => {
     return teamToId;
   };
 
-  const selectCountry = async (country: string) => {
+  const handleCountrySubmit = async (country: string) => {
     try {
       const res = await axiosInstance.get("leagues", {
         params: {
@@ -119,12 +119,12 @@ const App = () => {
     }
   };
 
-  const selectLeague = (league: string) => {
+  const handleLeagueSubmit = (league: string) => {
     setSelectedLeague(leagueToId[league]);
     setSeasonYears(leagueToSeasonYears[league]);
   };
 
-  const selectYear = async (year: string) => {
+  const handleSeasonSubmit = async (year: string) => {
     try {
       const res = await axiosInstance.get("teams", {
         params: {
@@ -171,7 +171,7 @@ const App = () => {
     }
   };
 
-  const onApiKeySubmit = (key: string) => {
+  const handleApiKeySubmit = (key: string) => {
     axiosInstance.defaults.headers["X-RapidAPI-Key"] = key;
     fetchCountries();
   };
@@ -179,24 +179,28 @@ const App = () => {
   return (
     <>
       <h1>API-Football</h1>
-      <APIKeyInput handleSubmit={onApiKeySubmit} />
+      <APIKeyInput handleSubmit={handleApiKeySubmit} />
       <div>
         {countryNames.length ? (
           <SelectBox
             options={countryNames}
             prompt={"Selecione o país:"}
-            handleSubmit={selectCountry}
+            handleSubmit={handleCountrySubmit}
           />
         ) : null}
         {leagueNames.length ? (
           <SelectBox
             options={leagueNames}
             prompt={"Selecione a liga:"}
-            handleSubmit={selectLeague}
+            handleSubmit={handleLeagueSubmit}
           />
         ) : null}
         {seasonYears.length ? (
-          <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={selectYear} />
+          <SelectBox
+            options={seasonYears}
+            prompt="Selecione o ano:"
+            handleSubmit={handleSeasonSubmit}
+          />
         ) : null}
         {teamNames.length ? (
           <SelectBox
