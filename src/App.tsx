@@ -18,12 +18,14 @@ const handleAPIError = (error: AxiosError) => {
 const App = () => {
   const [countryNames, setCountryNames] = React.useState<string[]>([]);
   const [leagueNames, setLeagueNames] = React.useState<string[]>([]);
+
   const [leagueToSeasonYears, setLeagueToSeasonYears] = React.useState<Record<string, string[]>>(
     {}
   );
+  const [leagueToId, setLeagueToId] = React.useState<Record<string, number>>({});
   const [seasonYears, setSeasonYears] = React.useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = React.useState<string>("");
-  const [selectedLeague, setSelectedLeague] = React.useState<string>("");
+  const [selectedLeague, setSelectedLeague] = React.useState<number>(0);
   const [selectedYear, setSelectedYear] = React.useState<string>("");
 
   const fetchCountries = async () => {
@@ -57,6 +59,16 @@ const App = () => {
     return leagueToSeasonYears;
   };
 
+  const getLeagueToId = (leagueDetails: LeagueDetail[]): Record<string, number> => {
+    let leagueToId: Record<string, number> = {};
+    for (let i in leagueDetails) {
+      let leagueName = leagueDetails[i].league.name;
+      let leagueId = leagueDetails[i].league.id;
+      leagueToId[leagueName] = leagueId;
+    }
+    return leagueToId;
+  };
+
   const selectCountry = async (country: string) => {
     try {
       const res = await axiosInstance.get("leagues", {
@@ -68,14 +80,31 @@ const App = () => {
       setSelectedCountry(country);
       setLeagueNames(leagues.map((l: League) => l.name));
       setLeagueToSeasonYears(getLeagueToSeasonYears(res.data.response));
+      setLeagueToId(getLeagueToId(res.data.response));
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
   };
 
   const selectLeague = (league: string) => {
-    setSelectedLeague(league);
+    setSelectedLeague(leagueToId[league]);
     setSeasonYears(leagueToSeasonYears[league]);
+  };
+
+  const selectYear = async (year: string) => {
+    try {
+      const res = await axiosInstance.get("teams", {
+        params: {
+          country: selectedCountry,
+          league: selectedLeague,
+          season: year,
+        },
+      });
+      debugger;
+      console.log(res.data.response);
+    } catch (err) {
+      handleAPIError(err as AxiosError);
+    }
   };
 
   const onApiKeySubmit = (key: string) => {
@@ -98,7 +127,7 @@ const App = () => {
         <SelectBox options={leagueNames} prompt={"Selecione a liga:"} handleSubmit={selectLeague} />
       ) : null}
       {seasonYears.length ? (
-        <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={() => {}} />
+        <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={selectYear} />
       ) : null}
     </>
   );
