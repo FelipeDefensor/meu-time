@@ -72,16 +72,9 @@ type TotalAndPercentage = {
   percentage: number;
 };
 
-type CountByMinutes = {
-  "0-15": TotalAndPercentage;
-  "16-30": TotalAndPercentage;
-  "31-45": TotalAndPercentage;
-  "46-60": TotalAndPercentage;
-  "61-75": TotalAndPercentage;
-  "76-90": TotalAndPercentage;
-  "91-105": TotalAndPercentage;
-  "106-120": TotalAndPercentage;
-};
+type Minutes = "0-15" | "16-30" | "31-45" | "46-60" | "61-75" | "76-90" | "91-105" | "106-120";
+
+type CountByMinutes = Record<Minutes, TotalAndPercentage>;
 
 type GoalsFor = {
   total: HomeAwayCount;
@@ -99,4 +92,5 @@ export type {
   Fixtures,
   GoalsFor,
   CountByMinutes,
+  Minutes,
 };

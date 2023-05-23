@@ -1,14 +1,14 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Text } from "recharts";
-import { GoalsFor } from "./types";
+import { CountByMinutes, Minutes } from "./types";
 
 type Props = {
-  data: GoalsFor;
+  data: CountByMinutes;
 };
 
 const GoalsChart: React.FC<Props> = ({ data }) => {
   console.log(data);
   const chartData = Object.keys(data).map((key) => {
-    const { total } = data[key];
+    const { total } = data[key as Minutes];
     console.log(key, total);
     return {
       name: key,
