@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import MostUsedFormation from "./MostUsedFormation";
+import React from "react";
+import MostUsedFormation from "../../src/MostUsedFormation";
 
 describe("MostUsedFormation component", () => {
   it("renders correctly", () => {

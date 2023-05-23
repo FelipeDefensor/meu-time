@@ -1,10 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import PlayerList from "./PlayersList";
+import React from "react";
+import PlayersList from "../../src/PlayersList";
 
-describe("PlayerList", () => {
+describe("PlayersList", () => {
   it("should render", () => {
-    render(<PlayerList players={[]} />);
+    render(<PlayersList players={[]} />);
     expect(screen.getByText("Name")).toBeInTheDocument();
     expect(screen.getByText("Age")).toBeInTheDocument();
     expect(screen.getByText("Nationality")).toBeInTheDocument();
@@ -33,7 +34,7 @@ describe("PlayerList", () => {
   ];
 
   it("should render a list of players", () => {
-    render(<PlayerList players={players} />);
+    render(<PlayersList players={players} />);
 
     expect(screen.getByText("Player 1")).toBeInTheDocument();
     expect(screen.getByText("Player 2")).toBeInTheDocument();

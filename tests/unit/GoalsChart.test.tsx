@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import GoalsChart from "./GoalsChart";
+import React from "react";
+import GoalsChart from "../../src/GoalsChart";
 
 describe("GoalsChart", () => {
   const mockData = {

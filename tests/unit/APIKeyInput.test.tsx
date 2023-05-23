@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import APIKeyInput from "./APIKeyInput";
+import APIKeyInput from "../../src/APIKeyInput";
 
 describe("APIKeyInput", () => {
   it("renders input and submit button", () => {

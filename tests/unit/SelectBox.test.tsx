@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import SelectBox from "./SelectBox";
+import React from "react";
+import SelectBox from "../../src/SelectBox";
 
 describe("SelectBox", () => {
   const options = ["a1", "b2", "c3", "d4"];

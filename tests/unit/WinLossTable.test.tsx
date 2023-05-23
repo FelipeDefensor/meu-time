@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
-import WinLossTable from "./WinLossTable";
+import React from "react";
+import WinLossTable from "../../src/WinLossTable";
 
 describe("WinLossTable", () => {
   const mockFixtures = {
