@@ -4,7 +4,6 @@ import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 import APIKeyInput from "./APIKeyInput";
 import {
-  CountByMinutes,
   Country,
   Fixtures,
   Formation,
@@ -12,7 +11,6 @@ import {
   League,
   LeagueDetail,
   Player,
-  Team,
   TeamDetail,
 } from "./types";
 import SelectBox from "./SelectBox";
@@ -29,8 +27,6 @@ const handleAPIError = (error: AxiosError) => {
   }
   console.log(error);
 };
-
-const fetchFromAPI = (url: string) => {};
 
 const App = () => {
   const [countryNames, setCountryNames] = React.useState<string[]>([]);
