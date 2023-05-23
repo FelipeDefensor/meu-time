@@ -3,7 +3,7 @@ import "./App.css";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 import APIKeyInput from "./APIKeyInput";
-import { Country, League, LeagueDetail, Team, TeamDetail } from "./types";
+import { Country, Fixtures, GoalsFor, League, LeagueDetail, Player, Team, TeamDetail } from "./types";
 import SelectBox from "./SelectBox";
 
 const handleAPIError = (error: AxiosError) => {
@@ -14,6 +14,8 @@ const handleAPIError = (error: AxiosError) => {
   }
   console.log(error);
 };
+
+const fetchFromAPI = (url: string) => {};
 
 const App = () => {
   const [countryNames, setCountryNames] = React.useState<string[]>([]);
@@ -28,6 +30,11 @@ const App = () => {
   const [selectedLeague, setSelectedLeague] = React.useState<number>(0);
   const [selectedYear, setSelectedYear] = React.useState<number>(0);
   const [teamNames, setTeamNames] = React.useState<string[]>([]);
+  const [teamNameToId, setTeamNameToId] = React.useState<Record<string, number>>({});
+  const [players, setPlayers] = React.useState<Player[]>([]);
+  const [mostUsedFormation, setMostUsedFormation] = React.useState("");
+  const [fixtures, setFixtures] = React.useState<Fixtures | null>(null);
+  const [goalsFor, setGoalsFor] = React.useState<GoalsFor | null>(null);
 
   const fetchCountries = async () => {
     try {
@@ -70,6 +77,16 @@ const App = () => {
     return leagueToId;
   };
 
+  const getTeamNameToId = (teamDetails: TeamDetail[]): Record<string, number> => {
+    let teamToId: Record<string, number> = {};
+    for (let i in teamDetails) {
+      let teamName = teamDetails[i].team.name;
+      let teamId = teamDetails[i].team.id;
+      teamToId[teamName] = teamId;
+    }
+    return teamToId;
+  };
+
   const selectCountry = async (country: string) => {
     try {
       const res = await axiosInstance.get("leagues", {
@@ -104,6 +121,33 @@ const App = () => {
       setSelectedYear(parseInt(year));
       debugger;
       setTeamNames(res.data.response.map((x: TeamDetail) => x.team.name));
+      setTeamNameToId(getTeamNameToId(res.data.response));
+    } catch (err) {
+      handleAPIError(err as AxiosError);
+    }
+  };
+
+  const handleTeamSubmit = async (team: string) => {
+    try {
+      const res = await axiosInstance.get("players/squads", {
+        params: {
+          team: teamNameToId[team],
+        },
+      });
+      setPlayers(res.data.response.players);
+    } catch (err) {
+      handleAPIError(err as AxiosError);
+    }
+
+    try {
+      const res = await axiosInstance.get("teams/statistics", {
+        params: {
+          team: teamNameToId[team],
+        },
+      });
+      setMostUsedFormation(res.data.response.lineups[0]);
+      setFixtures(res.data.fixtures);
+      setGoalsFor(res.data.goals.for);
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -132,7 +176,7 @@ const App = () => {
         <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={selectYear} />
       ) : null}
       {teamNames.length ? (
-        <SelectBox options={teamNames} prompt="Selecione o time:" handleSubmit={() => {}} />
+        <SelectBox options={teamNames} prompt="Selecione o time:" handleSubmit={handleTeamSubmit} />
       ) : null}
     </>
   );
