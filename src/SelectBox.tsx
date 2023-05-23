@@ -4,9 +4,10 @@ type SelectBoxProps = {
   options: string[];
   prompt: string;
   handleSubmit: (key: string) => void;
+  selectId?: string;
 };
 
-const SelectBox = ({ options, prompt, handleSubmit }: SelectBoxProps) => {
+const SelectBox = ({ options, prompt, handleSubmit, selectId }: SelectBoxProps) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const select = event.currentTarget.elements.namedItem("select") as HTMLSelectElement;
@@ -20,7 +21,7 @@ const SelectBox = ({ options, prompt, handleSubmit }: SelectBoxProps) => {
   return (
     <form onSubmit={onSubmit}>
       <label htmlFor="select">{prompt}</label>
-      <select name="select">
+      <select name="select" id={selectId}>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

@@ -186,6 +186,7 @@ const App = () => {
             options={countryNames}
             prompt={"Selecione o país:"}
             handleSubmit={handleCountrySubmit}
+            selectId="countrySelect"
           />
         ) : null}
         {leagueNames.length ? (
@@ -193,6 +194,7 @@ const App = () => {
             options={leagueNames}
             prompt={"Selecione a liga:"}
             handleSubmit={handleLeagueSubmit}
+            selectId="leagueSelect"
           />
         ) : null}
         {seasonYears.length ? (
@@ -200,6 +202,7 @@ const App = () => {
             options={seasonYears}
             prompt="Selecione o ano:"
             handleSubmit={handleSeasonSubmit}
+            selectId="seasonSelect"
           />
         ) : null}
         {teamNames.length ? (
@@ -207,6 +210,7 @@ const App = () => {
             options={teamNames}
             prompt="Selecione o time:"
             handleSubmit={handleTeamSubmit}
+            selectId="teamSelect"
           />
         ) : null}
       </div>
