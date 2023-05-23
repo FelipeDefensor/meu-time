@@ -6,22 +6,33 @@ type PlayerListProps = {
 };
 
 const PlayerList: React.FC<PlayerListProps> = ({ players }) => (
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
-    <div>Name</div>
-    <div>Age</div>
-    <div>Nationality</div>
-    <div>Photo</div>
-    {players.map((player) => (
-      <>
-        <div>{player.name}</div>
-        <div>{player.age}</div>
-        <div>{player.nationality}</div>
-        <div>
-          <img src={player.photo} alt={player.name} width="50" height="50" />
-        </div>
-      </>
-    ))}
-  </div>
+  <table className="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Age</th>
+        <th scope="col">Nationality</th>
+        <th scope="col">Photo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {players.map((player, index) => (
+        <tr key={index} className="align-items-center">
+          <td>{player.name}</td>
+          <td>{player.age}</td>
+          <td>{player.nationality}</td>
+          <td>
+            <img
+              src={player.photo}
+              alt={player.name}
+              className="img-thumbnail"
+              style={{ width: "50px", height: "50px" }}
+            />
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
 );
 
 export default PlayerList;
