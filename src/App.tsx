@@ -6,6 +6,7 @@ import APIKeyInput from "./APIKeyInput";
 import { Country, League, LeagueDetail } from "./types";
 import CountrySelectBox from "./CountrySelectBox";
 import LeagueSelectBox from "./LeagueSelectBox";
+import YearSelectBox from "./YearSelectBox";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -22,6 +23,7 @@ const App = () => {
   const [leagueToSeasonYears, setLeagueToSeasonYears] = React.useState<Record<string, number[]>>(
     {}
   );
+  const [seasonYears, setSeasonYears] = React.useState<number[]>([]);
 
   const fetchCountries = async () => {
     try {
@@ -68,6 +70,10 @@ const App = () => {
     }
   };
 
+  const displaySeasonYears = (league: string) => {
+    setSeasonYears(leagueToSeasonYears[league]);
+  };
+
   const onApiKeySubmit = (key: string) => {
     axiosInstance.defaults.headers["X-RapidAPI-Key"] = key;
     fetchCountries();
@@ -80,7 +86,10 @@ const App = () => {
       {countries.length ? (
         <CountrySelectBox countries={countries} handleSubmit={fetchLeagues} />
       ) : null}
-      {leagues.length ? <LeagueSelectBox leagues={leagues} handleSubmit={() => {}} /> : null}
+      {leagues.length ? (
+        <LeagueSelectBox leagues={leagues} handleSubmit={displaySeasonYears} />
+      ) : null}
+      {seasonYears.length ? <YearSelectBox years={seasonYears} handleSubmit={() => {}} /> : null}
     </>
   );
 };
