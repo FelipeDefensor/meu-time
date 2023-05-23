@@ -4,9 +4,7 @@ import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 import APIKeyInput from "./APIKeyInput";
 import { Country, League, LeagueDetail } from "./types";
-import CountrySelectBox from "./CountrySelectBox";
-import LeagueSelectBox from "./LeagueSelectBox";
-import YearSelectBox from "./YearSelectBox";
+import SelectBox from "./SelectBox";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -18,17 +16,17 @@ const handleAPIError = (error: AxiosError) => {
 };
 
 const App = () => {
-  const [countries, setCountries] = React.useState<Country[]>([]);
-  const [leagues, setLeagues] = React.useState<League[]>([]);
-  const [leagueToSeasonYears, setLeagueToSeasonYears] = React.useState<Record<string, number[]>>(
+  const [countryNames, setCountryNames] = React.useState<string[]>([]);
+  const [leagueNames, setLeagueNames] = React.useState<string[]>([]);
+  const [leagueToSeasonYears, setLeagueToSeasonYears] = React.useState<Record<string, string[]>>(
     {}
   );
-  const [seasonYears, setSeasonYears] = React.useState<number[]>([]);
+  const [seasonYears, setSeasonYears] = React.useState<string[]>([]);
 
   const fetchCountries = async () => {
     try {
       const res = await axiosInstance.get("countries");
-      setCountries(res.data.response);
+      setCountryNames(res.data.response.map((c: Country) => c.name));
     } catch (_err) {
       const err = _err as AxiosError;
       if (err.response?.status == 403) {
@@ -45,11 +43,11 @@ const App = () => {
     return leagues;
   };
 
-  const getLeagueToSeasonYears = (leagueDetails: LeagueDetail[]): Record<string, number[]> => {
-    let leagueToSeasonYears: Record<string, number[]> = {};
+  const getLeagueToSeasonYears = (leagueDetails: LeagueDetail[]): Record<string, string[]> => {
+    let leagueToSeasonYears: Record<string, string[]> = {};
     for (let i in leagueDetails) {
       let leagueName = leagueDetails[i].league.name;
-      let seasonYears = leagueDetails[i].seasons.map((l) => l.year);
+      let seasonYears = leagueDetails[i].seasons.map((l) => l.year.toString());
       leagueToSeasonYears[leagueName] = seasonYears;
     }
     console.log(leagueToSeasonYears);
@@ -63,7 +61,8 @@ const App = () => {
           country: country,
         },
       });
-      setLeagues(getLeagues(res.data.response));
+      const leagues = getLeagues(res.data.response);
+      setLeagueNames(leagues.map((l: League) => l.name));
       setLeagueToSeasonYears(getLeagueToSeasonYears(res.data.response));
     } catch (err) {
       handleAPIError(err as AxiosError);
@@ -83,13 +82,23 @@ const App = () => {
     <>
       <h1>API-Football</h1>
       <APIKeyInput handleSubmit={onApiKeySubmit} />
-      {countries.length ? (
-        <CountrySelectBox countries={countries} handleSubmit={fetchLeagues} />
+      {countryNames.length ? (
+        <SelectBox
+          options={countryNames}
+          prompt={"Selecione o país:"}
+          handleSubmit={fetchLeagues}
+        />
       ) : null}
-      {leagues.length ? (
-        <LeagueSelectBox leagues={leagues} handleSubmit={displaySeasonYears} />
+      {leagueNames.length ? (
+        <SelectBox
+          options={leagueNames}
+          prompt={"Selecione a liga:"}
+          handleSubmit={displaySeasonYears}
+        />
       ) : null}
-      {seasonYears.length ? <YearSelectBox years={seasonYears} handleSubmit={() => {}} /> : null}
+      {seasonYears.length ? (
+        <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={() => {}} />
+      ) : null}
     </>
   );
 };
