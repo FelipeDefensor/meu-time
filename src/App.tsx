@@ -35,7 +35,7 @@ const App = () => {
     }
   };
 
-  const getLeaguesFromResponse = (leagueDetails: LeagueDetail[]): League[] => {
+  const getLeagues = (leagueDetails: LeagueDetail[]): League[] => {
     let leagues: League[] = [];
     for (let i in leagueDetails) {
       leagues.push(leagueDetails[i].league);
@@ -61,8 +61,7 @@ const App = () => {
           country: country,
         },
       });
-      const leagues = getLeaguesFromResponse(res.data.response);
-      setLeagues(leagues);
+      setLeagues(getLeagues(res.data.response));
       setLeagueToSeasonYears(getLeagueToSeasonYears(res.data.response));
     } catch (err) {
       handleAPIError(err as AxiosError);
