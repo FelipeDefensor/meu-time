@@ -23,4 +23,19 @@ type LeagueDetail = {
   seasons: Season[];
 };
 
-export type { Country, League, LeagueDetail };
+type TeamDetail = {
+  team: Team;
+  venue: object;
+};
+
+type Team = {
+  code: string;
+  country: string;
+  founded: number;
+  id: number;
+  logo: string;
+  name: string;
+  national: boolean;
+};
+
+export type { Country, League, LeagueDetail, Team, TeamDetail };

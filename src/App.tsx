@@ -3,7 +3,7 @@ import "./App.css";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
 import APIKeyInput from "./APIKeyInput";
-import { Country, League, LeagueDetail } from "./types";
+import { Country, League, LeagueDetail, Team, TeamDetail } from "./types";
 import SelectBox from "./SelectBox";
 
 const handleAPIError = (error: AxiosError) => {
@@ -26,7 +26,8 @@ const App = () => {
   const [seasonYears, setSeasonYears] = React.useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = React.useState<string>("");
   const [selectedLeague, setSelectedLeague] = React.useState<number>(0);
-  const [selectedYear, setSelectedYear] = React.useState<string>("");
+  const [selectedYear, setSelectedYear] = React.useState<number>(0);
+  const [teamNames, setTeamNames] = React.useState<string[]>([]);
 
   const fetchCountries = async () => {
     try {
@@ -100,8 +101,9 @@ const App = () => {
           season: year,
         },
       });
+      setSelectedYear(parseInt(year));
       debugger;
-      console.log(res.data.response);
+      setTeamNames(res.data.response.map((x: TeamDetail) => x.team.name));
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -128,6 +130,9 @@ const App = () => {
       ) : null}
       {seasonYears.length ? (
         <SelectBox options={seasonYears} prompt="Selecione o ano:" handleSubmit={selectYear} />
+      ) : null}
+      {teamNames.length ? (
+        <SelectBox options={teamNames} prompt="Selecione o time:" handleSubmit={() => {}} />
       ) : null}
     </>
   );
