@@ -176,11 +176,20 @@ const App = () => {
     <>
       <h1>API-Football</h1>
       <APIKeyInput handleSubmit={handleApiKeySubmit} />
-      <div>
+      <div
+        style={{
+          maxWidth: 400,
+          margin: "auto",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          marginTop: "30px",
+        }}
+      >
         {countryNames.length ? (
           <SelectBox
             options={countryNames}
-            prompt={"Selecione o país:"}
+            prompt={"País"}
             handleSubmit={handleCountrySubmit}
             selectId="countrySelect"
           />
@@ -188,7 +197,7 @@ const App = () => {
         {leagueNames.length ? (
           <SelectBox
             options={leagueNames}
-            prompt={"Selecione a liga:"}
+            prompt={"Liga"}
             handleSubmit={handleLeagueSubmit}
             selectId="leagueSelect"
           />
@@ -196,7 +205,7 @@ const App = () => {
         {seasonYears.length ? (
           <SelectBox
             options={seasonYears}
-            prompt="Selecione o ano:"
+            prompt="Temporada"
             handleSubmit={handleSeasonSubmit}
             selectId="seasonSelect"
           />
@@ -204,7 +213,7 @@ const App = () => {
         {teamNames.length ? (
           <SelectBox
             options={teamNames}
-            prompt="Selecione o time:"
+            prompt="Time"
             handleSubmit={handleTeamSubmit}
             selectId="teamSelect"
           />

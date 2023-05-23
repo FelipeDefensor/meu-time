@@ -19,16 +19,24 @@ const SelectBox = ({ options, prompt, handleSubmit, selectId }: SelectBoxProps) 
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="select">{prompt}</label>
-      <select name="select" id={selectId}>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-      <input type="submit" value="Escolher" />
+    <form onSubmit={onSubmit} className="mb-3">
+      <div className="text-start text-muted ">
+        <label htmlFor="select" className="form-label">
+          {prompt}
+        </label>
+      </div>
+      <div className="d-flex">
+        <select name="select" id={selectId} className="form-select me-2">
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        <button type="submit" className="btn btn-primary">
+          Escolher
+        </button>
+      </div>
     </form>
   );
 };
