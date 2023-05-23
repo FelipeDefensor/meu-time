@@ -5,9 +5,10 @@ type SelectBoxProps = {
   prompt: string;
   handleSubmit: (key: string) => void;
   selectId?: string;
+  disabled?: boolean;
 };
 
-const SelectBox = ({ options, prompt, handleSubmit, selectId }: SelectBoxProps) => {
+const SelectBox = ({ options, prompt, handleSubmit, selectId, disabled }: SelectBoxProps) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const select = event.currentTarget.elements.namedItem("select") as HTMLSelectElement;
@@ -19,23 +20,29 @@ const SelectBox = ({ options, prompt, handleSubmit, selectId }: SelectBoxProps) 
   };
 
   return (
-    <form onSubmit={onSubmit} className="mb-3">
-      <div className="text-start text-muted ">
+    <form onChange={onSubmit} className="mb-3">
+      <div className="text-start text-muted">
         <label htmlFor="select" className="form-label">
           {prompt}
         </label>
       </div>
       <div className="d-flex">
-        <select name="select" id={selectId} className="form-select me-2">
+        <select
+          name="select"
+          id={selectId}
+          className="form-select me-2"
+          disabled={disabled}
+          style={{ minWidth: 200 }}
+        >
+          <option selected disabled>
+            ---
+          </option>
           {options.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
           ))}
         </select>
-        <button type="submit" className="btn btn-primary">
-          Escolher
-        </button>
       </div>
     </form>
   );

@@ -187,46 +187,41 @@ const App = () => {
       <APIKeyInput handleSubmit={handleApiKeySubmit} />
       <div
         style={{
-          maxWidth: 400,
+          maxWidth: 800,
           margin: "auto",
           display: "flex",
-          flexDirection: "column",
           justifyContent: "center",
           marginTop: "30px",
         }}
       >
-        {countryNames.length ? (
-          <SelectBox
-            options={countryNames}
-            prompt={"País"}
-            handleSubmit={handleCountrySubmit}
-            selectId="countrySelect"
-          />
-        ) : null}
-        {leagueNames.length ? (
-          <SelectBox
-            options={leagueNames}
-            prompt={"Liga"}
-            handleSubmit={handleLeagueSubmit}
-            selectId="leagueSelect"
-          />
-        ) : null}
-        {seasonYears.length ? (
-          <SelectBox
-            options={seasonYears}
-            prompt="Temporada"
-            handleSubmit={handleSeasonSubmit}
-            selectId="seasonSelect"
-          />
-        ) : null}
-        {teamNames.length ? (
-          <SelectBox
-            options={teamNames}
-            prompt="Time"
-            handleSubmit={handleTeamSubmit}
-            selectId="teamSelect"
-          />
-        ) : null}
+        <SelectBox
+          options={countryNames}
+          prompt={"País"}
+          handleSubmit={handleCountrySubmit}
+          selectId="countrySelect"
+          disabled={!countryNames.length}
+        />
+        <SelectBox
+          options={leagueNames}
+          prompt={"Liga"}
+          handleSubmit={handleLeagueSubmit}
+          selectId="leagueSelect"
+          disabled={!leagueNames.length}
+        />
+        <SelectBox
+          options={seasonYears}
+          prompt="Temporada"
+          handleSubmit={handleSeasonSubmit}
+          selectId="seasonSelect"
+          disabled={!seasonYears.length}
+        />
+        <SelectBox
+          options={teamNames}
+          prompt="Time"
+          handleSubmit={handleTeamSubmit}
+          selectId="teamSelect"
+          disabled={!teamNames.length}
+        />
       </div>
       <div style={{ display: "flex", gap: "30px", justifyContent: "center" }}>
         <span>

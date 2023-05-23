@@ -27,7 +27,6 @@ describe("SelectBox", () => {
     render(<SelectBox options={options} prompt="" handleSubmit={onSubmitMock} />);
 
     await user.selectOptions(screen.getByRole("combobox"), "b2");
-    await user.click(screen.getByRole("button"));
 
     expect(onSubmitMock).toHaveBeenCalledTimes(1);
     expect(onSubmitMock).toHaveBeenCalledWith("b2");
