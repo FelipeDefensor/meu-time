@@ -8,14 +8,14 @@ type PlayerListProps = {
 
 const PlayerList: React.FC<PlayerListProps> = ({ players, getFlagUrl }) => (
   <div>
-    <h4>Players</h4>
+    <h4>Jogadores</h4>
     <table className="table table-hover align-middle">
       <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Age</th>
-          <th scope="col">Nationality</th>
-          <th scope="col">Photo</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Idade</th>
+          <th scope="col">Nacionalidade</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>

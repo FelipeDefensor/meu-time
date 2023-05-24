@@ -18,7 +18,7 @@ const GoalsChart: React.FC<Props> = ({ data }) => {
 
   return (
     <>
-      <h4>Goals by Match Time</h4>
+      <h4>Gols/tempo de jogo</h4>
       <BarChart
         width={500}
         height={300}
@@ -29,11 +29,11 @@ const GoalsChart: React.FC<Props> = ({ data }) => {
           left: 20,
           bottom: 15,
         }}
-        title={"Goals"}
+        title={"Gols"}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" label={{ value: "Minutes", dy: 20 }} />
-        <YAxis label={{ value: "Goals", angle: -90 }} />
+        <XAxis dataKey="name" label={{ value: "Minutos", dy: 20 }} />
+        <YAxis label={{ value: "Gols", angle: -90 }} />
         <Tooltip />
         <Bar dataKey="total" stackId="a" fill="#82ca9d" />
       </BarChart>

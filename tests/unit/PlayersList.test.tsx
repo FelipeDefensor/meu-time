@@ -13,10 +13,9 @@ describe("PlayersList", () => {
         }}
       />
     );
-    expect(screen.getByText("Name")).toBeInTheDocument();
-    expect(screen.getByText("Age")).toBeInTheDocument();
-    expect(screen.getByText("Nationality")).toBeInTheDocument();
-    expect(screen.getByText("Photo")).toBeInTheDocument();
+    expect(screen.getByText("Nome")).toBeInTheDocument();
+    expect(screen.getByText("Idade")).toBeInTheDocument();
+    expect(screen.getByText("Nacionalidade")).toBeInTheDocument();
   });
 
   const players = [

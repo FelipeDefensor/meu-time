@@ -17,7 +17,7 @@ describe("GoalsChart", () => {
   it("renders correctly", () => {
     render(<GoalsChart data={mockData} />);
 
-    expect(screen.getByText(/Goals by Match Time/i)).toBeInTheDocument();
+    expect(screen.getByText("Gols/tempo de jogo")).toBeInTheDocument();
   });
 
   it("displays the correct data", () => {

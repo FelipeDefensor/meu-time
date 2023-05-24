@@ -11,7 +11,7 @@ describe("MostUsedFormation component", () => {
 
     render(<MostUsedFormation formation={mockFormation} />);
 
-    expect(screen.getByText(/Preferred formation/i)).toBeInTheDocument();
-    expect(screen.getByText(/4-4-2 \(10 times\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Formação mais comum/i)).toBeInTheDocument();
+    expect(screen.getByText(/4-4-2 \(10 vezes\)/i)).toBeInTheDocument();
   });
 });
