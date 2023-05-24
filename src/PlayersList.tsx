@@ -3,24 +3,40 @@ import { Player } from "./types";
 
 type PlayerListProps = {
   players: Pick<Player, "name" | "age" | "nationality" | "photo">[];
+  getFlagUrl: (country: string) => string;
 };
 
-const PlayerList: React.FC<PlayerListProps> = ({ players }) => (
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
-    <div>Name</div>
-    <div>Age</div>
-    <div>Nationality</div>
-    <div>Photo</div>
-    {players.map((player) => (
-      <>
-        <div>{player.name}</div>
-        <div>{player.age}</div>
-        <div>{player.nationality}</div>
-        <div>
-          <img src={player.photo} alt={player.name} width="50" height="50" />
-        </div>
-      </>
-    ))}
+const PlayerList: React.FC<PlayerListProps> = ({ players, getFlagUrl }) => (
+  <div>
+    <h4>Jogadores</h4>
+    <table className="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Idade</th>
+          <th scope="col">Nacionalidade</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {players.map((player, index) => (
+          <tr key={index} className="align-items-center">
+            <td>{player.name}</td>
+            <td>{player.age}</td>
+            <td>
+              <img
+                src={getFlagUrl(player.nationality)}
+                alt={player.name}
+                style={{ width: "30px", height: "30px" }}
+              />
+            </td>
+            <td>
+              <img src={player.photo} alt={player.name} style={{ width: "50px", height: "50px" }} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
 );
 

@@ -5,9 +5,18 @@ type SelectBoxProps = {
   prompt: string;
   handleSubmit: (key: string) => void;
   selectId?: string;
+  disabled: boolean;
+  isLoading: boolean; // New prop for loading state
 };
 
-const SelectBox = ({ options, prompt, handleSubmit, selectId }: SelectBoxProps) => {
+const SelectBox = ({
+  options,
+  prompt,
+  handleSubmit,
+  selectId,
+  disabled,
+  isLoading,
+}: SelectBoxProps) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const select = event.currentTarget.elements.namedItem("select") as HTMLSelectElement;
@@ -19,16 +28,31 @@ const SelectBox = ({ options, prompt, handleSubmit, selectId }: SelectBoxProps) 
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="select">{prompt}</label>
-      <select name="select" id={selectId}>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+    <form onChange={onSubmit} className="mb-3">
+      <div className="text-start text-muted ">
+        <label htmlFor="select" className="form-label">
+          {prompt}
+        </label>
+      </div>
+      <div className="d-flex">
+        <select
+          name="select"
+          id={selectId}
+          className="form-select me-2"
+          style={{ minWidth: "200px" }}
+          disabled={disabled}
+        >
+          <option selected disabled>
+            ---
           </option>
-        ))}
-      </select>
-      <input type="submit" value="Escolher" />
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+        {isLoading && <div className="spinner"></div>}
+      </div>
     </form>
   );
 };

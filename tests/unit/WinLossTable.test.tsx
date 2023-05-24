@@ -14,25 +14,25 @@ describe("WinLossTable", () => {
     render(<WinLossTable fixtures={mockFixtures} />);
 
     // Played stats
-    expect(screen.getByText("Played")).toBeInTheDocument();
+    expect(screen.getByText("Jogadas")).toBeInTheDocument();
     expect(screen.getByText("1")).toBeInTheDocument();
     expect(screen.getByText("2")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
 
     // Wins stats
-    expect(screen.getByText("Wins")).toBeInTheDocument();
+    expect(screen.getByText("Vitórias")).toBeInTheDocument();
     expect(screen.getByText("4")).toBeInTheDocument();
     expect(screen.getByText("5")).toBeInTheDocument();
     expect(screen.getByText("6")).toBeInTheDocument();
 
     // Draws stats
-    expect(screen.getByText("Draws")).toBeInTheDocument();
+    expect(screen.getByText("Empates")).toBeInTheDocument();
     expect(screen.getByText("7")).toBeInTheDocument();
     expect(screen.getByText("8")).toBeInTheDocument();
     expect(screen.getByText("9")).toBeInTheDocument();
 
     // Losses stats
-    expect(screen.getByText("Losses")).toBeInTheDocument();
+    expect(screen.getByText("Derrotas")).toBeInTheDocument();
     expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("11")).toBeInTheDocument();
     expect(screen.getByText("12")).toBeInTheDocument();
@@ -58,9 +58,9 @@ describe("WinLossTable", () => {
       expect(withinRow.getByText(total.toString())).toBeInTheDocument();
     };
 
-    checkRow(rows[1], "Played", 1, 2, 3);
-    checkRow(rows[2], "Wins", 4, 5, 6);
-    checkRow(rows[3], "Draws", 7, 8, 9);
-    checkRow(rows[4], "Losses", 10, 11, 12);
+    checkRow(rows[1], "Jogadas", 1, 2, 3);
+    checkRow(rows[2], "Vitórias", 4, 5, 6);
+    checkRow(rows[3], "Empates", 7, 8, 9);
+    checkRow(rows[4], "Derrotas", 10, 11, 12);
   });
 });

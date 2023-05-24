@@ -2,7 +2,6 @@ import * as React from "react";
 import "./App.css";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
-import APIKeyInput from "./APIKeyInput";
 import {
   Country,
   Fixtures,
@@ -18,6 +17,8 @@ import PlayerList from "./PlayersList";
 import WinLossTable from "./WinLossTable";
 import GoalsChart from "./GoalsChart";
 import MostUsedFormation from "./MostUsedFormation";
+import TeamLogo from "./TeamLogo";
+import Login from "./Login";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -28,18 +29,28 @@ const handleAPIError = (error: AxiosError) => {
   console.log(error);
 };
 
-const App = () => {
-  const [countryNames, setCountryNames] = React.useState<string[]>([]);
-  const [leagueNames, setLeagueNames] = React.useState<string[]>([]);
+enum View {
+  LOGIN,
+  MAIN,
+}
 
-  const [leagueToSeasonYears, setLeagueToSeasonYears] = React.useState<Record<string, string[]>>(
-    {}
-  );
+const App = () => {
+  const [view, setView] = React.useState<View>(View.LOGIN);
+  const [isLoadingLogin, setIsLoadingLogin] = React.useState<boolean>(false);
+  const [isLoadingCountries, setIsLoadingCountries] = React.useState<boolean>(false);
+  const [isLoadingLeagues, setIsLoadingLeagues] = React.useState<boolean>(false);
+  const [isLoadingTeams, setIsLoadingTeams] = React.useState<boolean>(false);
+  const [isKeyInvalid, setIsKeyInvalid] = React.useState<boolean>(false);
+  const [countryNames, setCountryNames] = React.useState<string[]>([]);
+  const [countryToFlag, setCountryToFlag] = React.useState<Record<string, string>>({});
+  const [leagueNames, setLeagueNames] = React.useState<string[]>([]);
+  const [leagueToYears, setLeagueToYears] = React.useState<Record<string, string[]>>({});
   const [leagueToId, setLeagueToId] = React.useState<Record<string, number>>({});
   const [seasonYears, setSeasonYears] = React.useState<string[]>([]);
   const [selectedCountry, setSelectedCountry] = React.useState<string>("");
   const [selectedLeague, setSelectedLeague] = React.useState<number>(0);
   const [selectedYear, setSelectedYear] = React.useState<number>(0);
+  const [selectedTeam, setSelectedTeam] = React.useState<number>(0);
   const [teamNames, setTeamNames] = React.useState<string[]>([]);
   const [teamNameToId, setTeamNameToId] = React.useState<Record<string, number>>({});
   const [players, setPlayers] = React.useState<Player[]>([]);
@@ -49,12 +60,17 @@ const App = () => {
 
   const fetchCountries = async () => {
     try {
+      setIsLoadingCountries(true);
       const res = await axiosInstance.get("countries");
       setCountryNames(res.data.response.map((c: Country) => c.name));
+      setCountryToFlag(getCountryToFlag(res.data.response));
+      setIsLoadingCountries(false);
+      return true;
     } catch (_err) {
       const err = _err as AxiosError;
       if (err.response?.status == 403) {
-        console.log("Chave da API inválida.");
+        setIsKeyInvalid(true);
+        return false;
       } else handleAPIError(err);
     }
   };
@@ -74,8 +90,17 @@ const App = () => {
       let seasonYears = leagueDetails[i].seasons.map((l) => l.year.toString());
       leagueToSeasonYears[leagueName] = seasonYears;
     }
-    console.log(leagueToSeasonYears);
     return leagueToSeasonYears;
+  };
+
+  const getCountryToFlag = (countries: Country[]) => {
+    let countryToFlag: Record<string, string> = {};
+    for (let i in countries) {
+      let name = countries[i].name;
+      let code = countries[i].flag;
+      countryToFlag[name] = code;
+    }
+    return countryToFlag;
   };
 
   const getLeagueToId = (leagueDetails: LeagueDetail[]): Record<string, number> => {
@@ -100,6 +125,7 @@ const App = () => {
 
   const handleCountrySubmit = async (country: string) => {
     try {
+      setIsLoadingLeagues(true);
       const res = await axiosInstance.get("leagues", {
         params: {
           country: country,
@@ -108,8 +134,9 @@ const App = () => {
       const leagues = getLeagues(res.data.response);
       setSelectedCountry(country);
       setLeagueNames(leagues.map((l: League) => l.name));
-      setLeagueToSeasonYears(getLeagueToSeasonYears(res.data.response));
+      setLeagueToYears(getLeagueToSeasonYears(res.data.response));
       setLeagueToId(getLeagueToId(res.data.response));
+      setIsLoadingLeagues(false);
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -117,11 +144,12 @@ const App = () => {
 
   const handleLeagueSubmit = (league: string) => {
     setSelectedLeague(leagueToId[league]);
-    setSeasonYears(leagueToSeasonYears[league]);
+    setSeasonYears(leagueToYears[league]);
   };
 
   const handleSeasonSubmit = async (year: string) => {
     try {
+      setIsLoadingTeams(true);
       const res = await axiosInstance.get("teams", {
         params: {
           country: selectedCountry,
@@ -132,6 +160,7 @@ const App = () => {
       setSelectedYear(parseInt(year));
       setTeamNames(res.data.response.map((x: TeamDetail) => x.team.name));
       setTeamNameToId(getTeamNameToId(res.data.response));
+      setIsLoadingTeams(false);
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -146,6 +175,7 @@ const App = () => {
           season: selectedYear,
         },
       });
+      setSelectedTeam(res.data.parameters.team);
       setPlayers(res.data.response.map((x: { player: Player; statistics: object }) => x.player));
     } catch (err) {
       handleAPIError(err as AxiosError);
@@ -167,56 +197,83 @@ const App = () => {
     }
   };
 
-  const handleApiKeySubmit = (key: string) => {
+  const handleApiKeySubmit = async (key: string) => {
     axiosInstance.defaults.headers["X-RapidAPI-Key"] = key;
-    fetchCountries();
+    const keyValid = await fetchCountries();
+    keyValid ? setView(View.MAIN) : setIsKeyInvalid(true);
   };
+
+  const getTeamLogoUrl = () => {
+    return `https://media.api-sports.io/football/teams/${selectedTeam}.png`;
+  };
+
+  if (view == View.LOGIN) {
+    return <Login handleKeySubmit={handleApiKeySubmit} isKeyInvalid={isKeyInvalid} />;
+  }
 
   return (
     <>
-      <h1>API-Football</h1>
-      <APIKeyInput handleSubmit={handleApiKeySubmit} />
-      <div>
-        {countryNames.length ? (
-          <SelectBox
-            options={countryNames}
-            prompt={"Selecione o país:"}
-            handleSubmit={handleCountrySubmit}
-            selectId="countrySelect"
-          />
-        ) : null}
-        {leagueNames.length ? (
-          <SelectBox
-            options={leagueNames}
-            prompt={"Selecione a liga:"}
-            handleSubmit={handleLeagueSubmit}
-            selectId="leagueSelect"
-          />
-        ) : null}
-        {seasonYears.length ? (
-          <SelectBox
-            options={seasonYears}
-            prompt="Selecione o ano:"
-            handleSubmit={handleSeasonSubmit}
-            selectId="seasonSelect"
-          />
-        ) : null}
-        {teamNames.length ? (
-          <SelectBox
-            options={teamNames}
-            prompt="Selecione o time:"
-            handleSubmit={handleTeamSubmit}
-            selectId="teamSelect"
-          />
-        ) : null}
+      <h1>Meu Time</h1>
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={countryNames}
+              prompt={"País"}
+              handleSubmit={handleCountrySubmit}
+              selectId="countrySelect"
+              disabled={!countryNames.length}
+              isLoading={isLoadingCountries}
+            />
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={leagueNames}
+              prompt={"Liga"}
+              handleSubmit={handleLeagueSubmit}
+              selectId="leagueSelect"
+              disabled={!leagueNames.length}
+              isLoading={isLoadingLeagues}
+            />
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={seasonYears}
+              prompt="Temporada"
+              handleSubmit={handleSeasonSubmit}
+              selectId="seasonSelect"
+              disabled={!seasonYears.length}
+              isLoading={false}
+            />
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={teamNames}
+              prompt="Time"
+              handleSubmit={handleTeamSubmit}
+              selectId="teamSelect"
+              disabled={!teamNames.length}
+              isLoading={isLoadingTeams}
+            />
+          </div>
+        </div>
       </div>
-      <div style={{ display: "flex", gap: "30px", justifyContent: "center" }}>
-        <span>{players.length ? <PlayerList players={players} /> : null}</span>
-        <span>
-          {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
-          {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
-          {goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}
-        </span>
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            {selectedTeam ? <TeamLogo logoUrl={getTeamLogoUrl()} /> : null}
+            {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
+            <div className="col">
+              {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
+            </div>
+            <div className="col">{goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}</div>
+          </div>
+          <div className="col">
+            {players.length ? (
+              <PlayerList players={players} getFlagUrl={(c: string) => countryToFlag[c]} />
+            ) : null}
+          </div>
+        </div>
       </div>
     </>
   );

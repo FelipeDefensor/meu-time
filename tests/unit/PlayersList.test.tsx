@@ -5,11 +5,17 @@ import PlayersList from "../../src/PlayersList";
 
 describe("PlayersList", () => {
   it("should render", () => {
-    render(<PlayersList players={[]} />);
-    expect(screen.getByText("Name")).toBeInTheDocument();
-    expect(screen.getByText("Age")).toBeInTheDocument();
-    expect(screen.getByText("Nationality")).toBeInTheDocument();
-    expect(screen.getByText("Photo")).toBeInTheDocument();
+    render(
+      <PlayersList
+        players={players}
+        getFlagUrl={() => {
+          return "";
+        }}
+      />
+    );
+    expect(screen.getByText("Nome")).toBeInTheDocument();
+    expect(screen.getByText("Idade")).toBeInTheDocument();
+    expect(screen.getByText("Nacionalidade")).toBeInTheDocument();
   });
 
   const players = [
@@ -34,7 +40,14 @@ describe("PlayersList", () => {
   ];
 
   it("should render a list of players", () => {
-    render(<PlayersList players={players} />);
+    render(
+      <PlayersList
+        players={players}
+        getFlagUrl={() => {
+          return "";
+        }}
+      />
+    );
 
     expect(screen.getByText("Player 1")).toBeInTheDocument();
     expect(screen.getByText("Player 2")).toBeInTheDocument();
@@ -43,9 +56,5 @@ describe("PlayersList", () => {
     expect(screen.getByText("20")).toBeInTheDocument();
     expect(screen.getByText("21")).toBeInTheDocument();
     expect(screen.getByText("22")).toBeInTheDocument();
-
-    expect(screen.getByText("Argentina")).toBeInTheDocument();
-    expect(screen.getByText("Brazil")).toBeInTheDocument();
-    expect(screen.getByText("Chile")).toBeInTheDocument();
   });
 });
