@@ -113,4 +113,39 @@ describe("App Component", () => {
     expect(isTeamDisabled).toBe(false);
 
   });
+
+  test('team information is correctly displayed', async () => {
+    const apiKeyInput = await page.isVisible('input[name="apiKey"]');
+    expect(apiKeyInput).toBeTruthy();
+
+    await page.fill('input[name="apiKey"]', 'mockpasswd');
+    await page.click('text=Entrar');
+
+    await page.waitForResponse(response => response.status() === 200);
+
+    // select a country
+    const countrySelect = await page.$("#countrySelect");
+    await countrySelect?.selectOption('Brazil');
+    await page.waitForResponse(response => response.status() === 200);
+
+    // select a league
+    const leagueSelect = await page.$("#leagueSelect");
+    await leagueSelect?.selectOption('Serie A');
+
+    // select a season
+    const seasonSelect = await page.$("#seasonSelect");
+    await seasonSelect?.selectOption('2023');
+    await page.waitForResponse(response => response.status() === 200);
+        
+    // select a team
+    const teamSelect = await page.$("#teamSelect");
+    await teamSelect?.selectOption('Flamengo');
+    await page.waitForResponse(response => response.status() === 200);
+
+    expect(page.getByText('Carlos Pereira')).toBeTruthy();
+    expect(page.getByText('4-2-3-1')).toBeTruthy();
+    expect(page.getByText('Vitórias')).toBeTruthy();
+    expect(page.getByText('Gols/tempo de jogo')).toBeTruthy();
+
+  })
 });
