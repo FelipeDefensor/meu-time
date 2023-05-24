@@ -18,14 +18,7 @@ const GoalsChart: React.FC<Props> = ({ data }) => {
 
   return (
     <>
-      <Text
-        x={0}
-        y={0}
-        width={500}
-        style={{ textAnchor: "middle", transform: "translate(250px, -20px)" }}
-      >
-        Goals by Match Time
-      </Text>
+      <h4>Goals by Match Time</h4>
       <BarChart
         width={500}
         height={300}

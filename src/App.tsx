@@ -252,8 +252,8 @@ const App = () => {
         <span>
           {selectedTeam ? <TeamLogo logoUrl={getTeamLogoUrl()} /> : null}
           {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
-          {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
           {goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}
+          {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
         </span>
       </div>
     </>
