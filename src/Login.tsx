@@ -11,7 +11,7 @@ const Login = ({ handleKeySubmit, isKeyInvalid }: LoginProps) => {
     <div className="vh-100 d-flex align-items-center justify-content-center">
       <div className="text-center">
         <h1 className="display-3">
-          API-Football
+          Meu Time
           <img src={footballIcon} alt="football" className="rotating-football" />
         </h1>
         <div className="mt-5">

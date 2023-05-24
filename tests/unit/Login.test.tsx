@@ -10,9 +10,9 @@ describe("Login component", () => {
     render(<Login handleKeySubmit={() => {}} isKeyInvalid={false} />);
   });
 
-  it("displays API-Football title", () => {
+  it("displays Meu Time title", () => {
     render(<Login handleKeySubmit={() => {}} isKeyInvalid={false} />);
-    expect(screen.getByText("API-Football")).toBeInTheDocument();
+    expect(screen.getByText("Meu Time")).toBeInTheDocument();
   });
 
   it("renders APIKeyInput", () => {

@@ -213,7 +213,7 @@ const App = () => {
 
   return (
     <>
-      <h1>API-Football</h1>
+      <h1>Meu Time</h1>
       <div className="container">
         <div className="row">
           <div className="col-md-6 col-lg-3">
