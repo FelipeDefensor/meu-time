@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { countries, countryToLeagueDetail, leagueToTeams } from './apiData'
+import { countries, countryToLeagueDetail, leagueToTeams, teamToStatistics } from './apiData'
 
 const BASE_URL = 'https://api-football-v1.p.rapidapi.com/v3/'
 
@@ -39,6 +39,15 @@ export const handlers = [
 
       try {
         return res(ctx.status(200), ctx.json({ response: leagueToTeams[league] }));
+      } catch {
+        return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
+      }
+    }),
+    rest.get(BASE_URL + 'teams/statistics', (req, res, ctx) => {
+      const team = req.url.searchParams.get('team')
+
+      try {
+        return res(ctx.status(200), ctx.json({ response: teamToStatistics[team] }));
       } catch {
         return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
       }
