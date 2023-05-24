@@ -200,60 +200,66 @@ const App = () => {
     <>
       <h1>API-Football</h1>
       <APIKeyInput handleSubmit={handleApiKeySubmit} />
-      <div
-        style={{
-          maxWidth: 800,
-          margin: "auto",
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "30px",
-        }}
-      >
-        <SelectBox
-          options={countryNames}
-          prompt={"País"}
-          handleSubmit={handleCountrySubmit}
-          selectId="countrySelect"
-          disabled={!countryNames.length}
-          isLoading={isLoadingCountries}
-        />
-        <SelectBox
-          options={leagueNames}
-          prompt={"Liga"}
-          handleSubmit={handleLeagueSubmit}
-          selectId="leagueSelect"
-          disabled={!leagueNames.length}
-          isLoading={isLoadingLeagues}
-        />
-        <SelectBox
-          options={seasonYears}
-          prompt="Temporada"
-          handleSubmit={handleSeasonSubmit}
-          selectId="seasonSelect"
-          disabled={!seasonYears.length}
-          isLoading={false}
-        />
-        <SelectBox
-          options={teamNames}
-          prompt="Time"
-          handleSubmit={handleTeamSubmit}
-          selectId="teamSelect"
-          disabled={!teamNames.length}
-          isLoading={isLoadingTeams}
-        />
+      <div className="container">
+        <div className="row">
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={countryNames}
+              prompt={"País"}
+              handleSubmit={handleCountrySubmit}
+              selectId="countrySelect"
+              disabled={!countryNames.length}
+              isLoading={isLoadingCountries}
+            />
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={leagueNames}
+              prompt={"Liga"}
+              handleSubmit={handleLeagueSubmit}
+              selectId="leagueSelect"
+              disabled={!leagueNames.length}
+              isLoading={isLoadingLeagues}
+            />
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={seasonYears}
+              prompt="Temporada"
+              handleSubmit={handleSeasonSubmit}
+              selectId="seasonSelect"
+              disabled={!seasonYears.length}
+              isLoading={false}
+            />
+          </div>
+          <div className="col-md-6 col-lg-3">
+            <SelectBox
+              options={teamNames}
+              prompt="Time"
+              handleSubmit={handleTeamSubmit}
+              selectId="teamSelect"
+              disabled={!teamNames.length}
+              isLoading={isLoadingTeams}
+            />
+          </div>
+        </div>
       </div>
-      <div style={{ display: "flex", gap: "30px", justifyContent: "center" }}>
-        <span>
-          {players.length ? (
-            <PlayerList players={players} getFlagUrl={(c: string) => countryToFlag[c]} />
-          ) : null}
-        </span>
-        <span>
-          {selectedTeam ? <TeamLogo logoUrl={getTeamLogoUrl()} /> : null}
-          {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
-          {goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}
-          {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
-        </span>
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            {selectedTeam ? <TeamLogo logoUrl={getTeamLogoUrl()} /> : null}
+            {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
+            <div className="col">
+              {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
+            </div>
+            <div className="col">{goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}</div>
+          </div>
+          <div className="col">
+            {players.length ? (
+              <PlayerList players={players} getFlagUrl={(c: string) => countryToFlag[c]} />
+            ) : null}
+          </div>
+        </div>
       </div>
     </>
   );
