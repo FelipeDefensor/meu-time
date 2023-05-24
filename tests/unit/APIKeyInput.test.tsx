@@ -6,27 +6,23 @@ import APIKeyInput from "../../src/APIKeyInput";
 
 describe("APIKeyInput", () => {
   it("renders input and submit button", () => {
-    render(<APIKeyInput handleSubmit={() => {}} isKeyInvalid={false} />);
+    const { container } = render(<APIKeyInput handleSubmit={() => {}} isKeyInvalid={false} />);
 
-    const apiInput = screen.getByRole("textbox");
-    const apiSubmit = screen.getByRole("button");
-
-    expect(apiInput).toBeInTheDocument();
-    expect(apiSubmit).toBeInTheDocument();
+    expect(container.querySelector("input")).toBeInTheDocument();
+    expect(screen.getByText("Entrar")).toBeInTheDocument();
   });
 
   it("calls onSubmit with the api key when submitted", async () => {
     const user = userEvent.setup();
     const onSubmitMock = vi.fn();
-    render(<APIKeyInput handleSubmit={onSubmitMock} isKeyInvalid={false} />);
+    const { container } = render(<APIKeyInput handleSubmit={onSubmitMock} isKeyInvalid={false} />);
 
     expect(onSubmitMock).not.toHaveBeenCalled();
 
-    const apiInput = screen.getByRole("textbox");
-    const apiSubmit = screen.getByRole("button");
+    const apiInput = container.querySelector("input");
 
-    await user.type(apiInput, "test key");
-    await user.click(apiSubmit);
+    await user.type(apiInput!, "test key");
+    await user.click(screen.getByText("Entrar"));
 
     await waitFor(() => {
       expect(apiInput).toHaveValue("test key");

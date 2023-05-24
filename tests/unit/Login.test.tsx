@@ -16,8 +16,8 @@ describe("Login component", () => {
   });
 
   it("renders APIKeyInput", () => {
-    render(<Login handleKeySubmit={() => {}} isKeyInvalid={false} />);
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
+    const { container } = render(<Login handleKeySubmit={() => {}} isKeyInvalid={false} />);
+    expect(container.querySelector("input")).toBeInTheDocument();
   });
 
   it("calls handleKeySubmit on form submission", async () => {
@@ -33,12 +33,10 @@ describe("Login component", () => {
 
   it("calls handleKeySubmit with typed value on submission", async () => {
     const mockSubmit = vi.fn();
-    render(<Login handleKeySubmit={mockSubmit} isKeyInvalid={false} />);
+    const { container } = render(<Login handleKeySubmit={mockSubmit} isKeyInvalid={false} />);
 
-    await user.type(screen.getByRole("textbox"), "test key");
+    await user.type(container.querySelector("input")!, "test key");
     await user.click(screen.getByText("Entrar"));
-
-    screen.debug(screen.getByRole("textbox"));
 
     await waitFor(() => {
       expect(mockSubmit).toHaveBeenCalledTimes(1);
