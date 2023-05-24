@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:regular,bold,italic&subset=latin,latin-ext');
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -33,4 +35,9 @@
   animation: rotation 3s infinite linear;
   display: inline-block;
   margin-left: 20px;
+}
+
+h1 {
+  font-family: "Roboto Slab", Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 1000;
 }
