@@ -36,7 +36,6 @@ enum View {
 
 const App = () => {
   const [view, setView] = React.useState<View>(View.LOGIN);
-  const [isLoadingLogin, setIsLoadingLogin] = React.useState<boolean>(false);
   const [isLoadingCountries, setIsLoadingCountries] = React.useState<boolean>(false);
   const [isLoadingLeagues, setIsLoadingLeagues] = React.useState<boolean>(false);
   const [isLoadingTeams, setIsLoadingTeams] = React.useState<boolean>(false);
