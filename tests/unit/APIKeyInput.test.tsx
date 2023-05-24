@@ -6,7 +6,7 @@ import APIKeyInput from "../../src/APIKeyInput";
 
 describe("APIKeyInput", () => {
   it("renders input and submit button", () => {
-    render(<APIKeyInput handleSubmit={() => {}} />);
+    render(<APIKeyInput handleSubmit={() => {}} isKeyInvalid={false} />);
 
     const apiInput = screen.getByRole("textbox");
     const apiSubmit = screen.getByRole("button");
@@ -18,7 +18,7 @@ describe("APIKeyInput", () => {
   it("calls onSubmit with the api key when submitted", async () => {
     const user = userEvent.setup();
     const onSubmitMock = vi.fn();
-    render(<APIKeyInput handleSubmit={onSubmitMock} />);
+    render(<APIKeyInput handleSubmit={onSubmitMock} isKeyInvalid={false} />);
 
     expect(onSubmitMock).not.toHaveBeenCalled();
 

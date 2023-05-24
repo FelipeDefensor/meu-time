@@ -2,7 +2,6 @@ import * as React from "react";
 import "./App.css";
 import axiosInstance from "./axios";
 import { AxiosError } from "axios";
-import APIKeyInput from "./APIKeyInput";
 import {
   Country,
   Fixtures,
@@ -19,6 +18,7 @@ import WinLossTable from "./WinLossTable";
 import GoalsChart from "./GoalsChart";
 import MostUsedFormation from "./MostUsedFormation";
 import TeamLogo from "./TeamLogo";
+import Login from "./Login";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -29,10 +29,18 @@ const handleAPIError = (error: AxiosError) => {
   console.log(error);
 };
 
+enum View {
+  LOGIN,
+  MAIN,
+}
+
 const App = () => {
+  const [view, setView] = React.useState<View>(View.LOGIN);
+  const [isLoadingLogin, setIsLoadingLogin] = React.useState<boolean>(false);
   const [isLoadingCountries, setIsLoadingCountries] = React.useState<boolean>(false);
   const [isLoadingLeagues, setIsLoadingLeagues] = React.useState<boolean>(false);
   const [isLoadingTeams, setIsLoadingTeams] = React.useState<boolean>(false);
+  const [isKeyInvalid, setIsKeyInvalid] = React.useState<boolean>(false);
   const [countryNames, setCountryNames] = React.useState<string[]>([]);
   const [countryToFlag, setCountryToFlag] = React.useState<Record<string, string>>({});
   const [leagueNames, setLeagueNames] = React.useState<string[]>([]);
@@ -57,10 +65,12 @@ const App = () => {
       setCountryNames(res.data.response.map((c: Country) => c.name));
       setCountryToFlag(getCountryToFlag(res.data.response));
       setIsLoadingCountries(false);
+      return true;
     } catch (_err) {
       const err = _err as AxiosError;
       if (err.response?.status == 403) {
-        console.log("Chave da API inválida.");
+        setIsKeyInvalid(true);
+        return false;
       } else handleAPIError(err);
     }
   };
@@ -187,19 +197,23 @@ const App = () => {
     }
   };
 
-  const handleApiKeySubmit = (key: string) => {
+  const handleApiKeySubmit = async (key: string) => {
     axiosInstance.defaults.headers["X-RapidAPI-Key"] = key;
-    fetchCountries();
+    const keyValid = await fetchCountries();
+    keyValid ? setView(View.MAIN) : setIsKeyInvalid(true);
   };
 
   const getTeamLogoUrl = () => {
     return `https://media.api-sports.io/football/teams/${selectedTeam}.png`;
   };
 
+  if (view == View.LOGIN) {
+    return <Login handleKeySubmit={handleApiKeySubmit} isKeyInvalid={isKeyInvalid} />;
+  }
+
   return (
     <>
       <h1>API-Football</h1>
-      <APIKeyInput handleSubmit={handleApiKeySubmit} />
       <div className="container">
         <div className="row">
           <div className="col-md-6 col-lg-3">
