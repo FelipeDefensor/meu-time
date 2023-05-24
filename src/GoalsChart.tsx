@@ -6,10 +6,8 @@ type Props = {
 };
 
 const GoalsChart: React.FC<Props> = ({ data }) => {
-  console.log(data);
   const chartData = Object.keys(data).map((key) => {
     const { total } = data[key as Minutes];
-    console.log(key, total);
     return {
       name: key,
       total: total ? total : 0,

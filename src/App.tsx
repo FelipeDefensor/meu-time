@@ -80,7 +80,6 @@ const App = () => {
       let seasonYears = leagueDetails[i].seasons.map((l) => l.year.toString());
       leagueToSeasonYears[leagueName] = seasonYears;
     }
-    console.log(leagueToSeasonYears);
     return leagueToSeasonYears;
   };
 
