@@ -23,8 +23,8 @@ export const handlers = [
     }),
     rest.get(BASE_URL + 'leagues', (req, res, ctx) => {
       const country = req.url.searchParams.get('country')
-  
-      if (!country || !countryToLeagueDetail[country]) {
+        
+      if (!country || !countryToLeagueDetail[country as (keyof typeof countryToLeagueDetail)]) {
         return res(
           ctx.status(200),
           ctx.json({response: []})
@@ -33,14 +33,21 @@ export const handlers = [
       
       return res(
         ctx.status(200),
-        ctx.json({response: countryToLeagueDetail[country]})
+        ctx.json({response: countryToLeagueDetail[country as (keyof typeof countryToLeagueDetail)]})
       )
     }),
     rest.get(BASE_URL + 'teams', (req, res, ctx) => {
       const league = req.url.searchParams.get('league')
 
+      if (!league)  {
+        return res(
+          ctx.status(200),
+          ctx.json({response: []})
+        )
+      }
+
       try {
-        return res(ctx.status(200), ctx.json({ response: leagueToTeams[league!] }));
+        return res(ctx.status(200), ctx.json({ response: leagueToTeams[parseInt(league) as (keyof typeof leagueToTeams)] }));
       } catch {
         return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
       }
@@ -48,8 +55,15 @@ export const handlers = [
     rest.get(BASE_URL + 'teams/statistics', (req, res, ctx) => {
       const team = req.url.searchParams.get('team')
 
+      if (!team)  {
+        return res(
+          ctx.status(200),
+          ctx.json({response: []})
+        )
+      }
+
       try {
-        return res(ctx.status(200), ctx.json({ response: teamToStatistics[team!] }));
+        return res(ctx.status(200), ctx.json({ response: teamToStatistics[parseInt(team) as (keyof typeof teamToStatistics)] }));
       } catch {
         return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
       }
@@ -57,8 +71,15 @@ export const handlers = [
     rest.get(BASE_URL + 'players', (req, res, ctx) => {
       const team = req.url.searchParams.get('team')
 
+      if (!team)  {
+        return res(
+          ctx.status(200),
+          ctx.json({response: []})
+        )
+      }
+
       try {
-        return res(ctx.status(200), ctx.json({ response: teamToPlayers[team!], parameters: {team: parseInt(team!)} }));
+        return res(ctx.status(200), ctx.json({ response: teamToPlayers[parseInt(team) as keyof typeof teamToPlayers], parameters: {team: parseInt(team!)} }));
       } catch {
         return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
       }
