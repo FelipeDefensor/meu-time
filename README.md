@@ -30,7 +30,13 @@ O aplicativo será inicializado e você poderá acessá-lo no seu navegador atra
 
 ## Testes
 
-Para executar os testes usando o `vitest`, utilize o seguinte comando:
+Para executar os testes usando o `vitest`, inicie um servidor `vite` na porta 3000 com:
+
+```
+vite --port 3000
+```
+
+Então, rode os testes com o comando:
 
 ```
 npm run test
