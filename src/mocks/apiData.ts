@@ -1,7 +1,7 @@
 const countries = [
-    { name: 'Brazil', code: 'BR', flag: 'https://flags.example.com/br.svg' },
-    { name: 'Argentina', code: 'AR', flag: 'https://flags.example.com/ar.svg' },
-    { name: 'Peru', code: 'PE', flag: 'https://flags.example.com/pe.svg' },
+    { name: 'Brazil', code: 'BR', flag: '' },
+    { name: 'Argentina', code: 'AR', flag: '' },
+    { name: 'Peru', code: 'PE', flag: '' },
   ]
   
 const seasons = [
@@ -12,25 +12,25 @@ const seasons = [
  const players = [
     // Brazilian Players
     [
-      { age: 23, id: 1, name: 'Lucas Santos', number: 10, photo: '', position: 'Forward', nationality: 'Brazil' },
-      { age: 25, id: 2, name: 'Diego Silva', number: 7, photo: '', position: 'Midfielder', nationality: 'Brazil' },
-      { age: 27, id: 3, name: 'Carlos Pereira', number: 1, photo: '', position: 'Goalkeeper', nationality: 'Brazil' }
+      {player:{ age: 23, id: 1, name: 'Lucas Santos', number: 10, photo: '', position: 'Forward', nationality: 'Brazil' }, statistics: {}},
+      {player:{ age: 25, id: 2, name: 'Diego Silva', number: 7, photo: '', position: 'Midfielder', nationality: 'Brazil' }, statistics: {}},
+      {player:{ age: 27, id: 3, name: 'Carlos Pereira', number: 1, photo: '', position: 'Goalkeeper', nationality: 'Brazil' , statistics: {}}}
     ],
     // Argentinian Players
     [
-      { age: 26, id: 4, name: 'Javier Perez', number: 9, photo: '', position: 'Forward', nationality: 'Argentina'},
-      { age: 24, id: 5, name: 'Miguel Rodriguez', number: 8, photo: '', position: 'Midfielder', nationality: 'Argentina' },
-      { age: 29, id: 6, name: 'Fernando Garcia', number: 1, photo: '', position: 'Goalkeeper', nationality: 'Argentina' }
+      {player:{ age: 26, id: 4, name: 'Javier Perez', number: 9, photo: '', position: 'Forward', nationality: 'Argentina'}, statistics: {}},
+      {player:{ age: 24, id: 5, name: 'Miguel Rodriguez', number: 8, photo: '', position: 'Midfielder', nationality: 'Argentina' }, statistics: {}},
+      {player:{ age: 29, id: 6, name: 'Fernando Garcia', number: 1, photo: '', position: 'Goalkeeper', nationality: 'Argentina' , statistics: {}}}
     ],
     // Peruvian Players
     [
-      { age: 25, id: 7, name: 'Luis Morales', number: 11, photo: '', position: 'Forward', nationality: 'Peru'},
-      { age: 26, id: 8, name: 'Pedro Gomez', number: 6, photo: '', position: 'Midfielder', nationality: 'Peru' },
-      { age: 28, id: 9, name: 'Juan Sanchez', number: 1, photo: '', position: 'Goalkeeper', nationality: 'Peru' }
+      {player:{ age: 25, id: 7, name: 'Luis Morales', number: 11, photo: '', position: 'Forward', nationality: 'Peru'}, statistics: {}},
+      {player:{ age: 26, id: 8, name: 'Pedro Gomez', number: 6, photo: '', position: 'Midfielder', nationality: 'Peru' }, statistics: {}},
+      {player:{ age: 28, id: 9, name: 'Juan Sanchez', number: 1, photo: '', position: 'Goalkeeper', nationality: 'Peru' , statistics: {}}}
     ]
   ]
   
-const countryToTeams = {
+const countryToTeams =  {
     'Brazil': [
       {
         team: {
@@ -585,10 +585,15 @@ const teamToStatistics = {
                 }
             }
         }
-    }
+    },
+    // TODO: mock statistics for Argentina and Peru
 }
 
-
+const teamToPlayers = {
+    1: players[0],
+    2: players[1],
+    // TODO: mock players for Argentina and Peru
+}
 const leagueToTeams = {
     1: countryToTeams['Brazil'],
     2: countryToTeams['Brazil'],
@@ -644,4 +649,4 @@ const countryToLeagueDetail = {
 }
 
   
-export {countries, seasons, countryToTeams, players, countryToLeagueDetail, leagueToTeams, teamToStatistics}
+export {countries, seasons, countryToTeams, players, countryToLeagueDetail, leagueToTeams, teamToStatistics, teamToPlayers}

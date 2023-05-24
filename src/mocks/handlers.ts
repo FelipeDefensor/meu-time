@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { countries, countryToLeagueDetail, leagueToTeams, teamToStatistics } from './apiData'
+import { countries, countryToLeagueDetail, leagueToTeams, teamToPlayers, teamToStatistics } from './apiData'
 
 const BASE_URL = 'https://api-football-v1.p.rapidapi.com/v3/'
 
@@ -38,7 +38,7 @@ export const handlers = [
       const league = req.url.searchParams.get('league')
 
       try {
-        return res(ctx.status(200), ctx.json({ response: leagueToTeams[league] }));
+        return res(ctx.status(200), ctx.json({ response: leagueToTeams[league!] }));
       } catch {
         return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
       }
@@ -47,9 +47,19 @@ export const handlers = [
       const team = req.url.searchParams.get('team')
 
       try {
-        return res(ctx.status(200), ctx.json({ response: teamToStatistics[team] }));
+        return res(ctx.status(200), ctx.json({ response: teamToStatistics[team!] }));
       } catch {
         return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
       }
-    })
+    }),
+    rest.get(BASE_URL + 'players', (req, res, ctx) => {
+      const team = req.url.searchParams.get('team')
+
+      try {
+        return res(ctx.status(200), ctx.json({ response: teamToPlayers[team!], parameters: {team: parseInt(team!)} }));
+      } catch {
+        return res(ctx.status(404), ctx.json({ message: 'Not Found' }));
+      }
+    },
+  )
 ]
