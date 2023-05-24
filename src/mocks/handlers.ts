@@ -8,6 +8,8 @@ export const handlers = [
   rest.get(BASE_URL + 'countries', (req, res, ctx) => {
     const rapidAPIKey = req.headers.get('X-RapidAPI-Key')
 
+    debugger
+
     if (rapidAPIKey !== 'mockpasswd') {
       return res(
         ctx.status(403)
