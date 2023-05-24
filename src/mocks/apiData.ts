@@ -5,7 +5,7 @@ const countries = [
   ]
   
 const seasons = [
-    { year: 2023, start: '2023-01-10', end: '2023-06-10' },
+    { year: 2022, start: '2022-01-10', end: '2022-06-10' },
     { year: 2023, start: '2023-06-11', end: '2023-12-10' }
   ]
   
@@ -87,6 +87,15 @@ const countryToTeams = {
     ]
   }
 
+const leagueToTeams = {
+    1: countryToTeams['Brazil'],
+    2: countryToTeams['Brazil'],
+    3: countryToTeams['Argentina'],
+    4: countryToTeams['Argentina'],
+    5: countryToTeams['Peru'],
+    6: countryToTeams['Peru']
+}
+
 const countryToLeagueDetail = {
     'Brazil': [
         {
@@ -133,4 +142,4 @@ const countryToLeagueDetail = {
 }
 
   
-export {countries, seasons, countryToTeams, players, countryToLeagueDetail}
+export {countries, seasons, countryToTeams, players, countryToLeagueDetail, leagueToTeams}
