@@ -18,6 +18,7 @@ import PlayerList from "./PlayersList";
 import WinLossTable from "./WinLossTable";
 import GoalsChart from "./GoalsChart";
 import MostUsedFormation from "./MostUsedFormation";
+import TeamLogo from "./TeamLogo";
 
 const handleAPIError = (error: AxiosError) => {
   if (error.response?.status == 499) {
@@ -29,6 +30,9 @@ const handleAPIError = (error: AxiosError) => {
 };
 
 const App = () => {
+  const [isLoadingCountries, setIsLoadingCountries] = React.useState<boolean>(false);
+  const [isLoadingLeagues, setIsLoadingLeagues] = React.useState<boolean>(false);
+  const [isLoadingTeams, setIsLoadingTeams] = React.useState<boolean>(false);
   const [countryNames, setCountryNames] = React.useState<string[]>([]);
   const [countryToFlag, setCountryToFlag] = React.useState<Record<string, string>>({});
   const [leagueNames, setLeagueNames] = React.useState<string[]>([]);
@@ -38,6 +42,7 @@ const App = () => {
   const [selectedCountry, setSelectedCountry] = React.useState<string>("");
   const [selectedLeague, setSelectedLeague] = React.useState<number>(0);
   const [selectedYear, setSelectedYear] = React.useState<number>(0);
+  const [selectedTeam, setSelectedTeam] = React.useState<number>(0);
   const [teamNames, setTeamNames] = React.useState<string[]>([]);
   const [teamNameToId, setTeamNameToId] = React.useState<Record<string, number>>({});
   const [players, setPlayers] = React.useState<Player[]>([]);
@@ -47,9 +52,11 @@ const App = () => {
 
   const fetchCountries = async () => {
     try {
+      setIsLoadingCountries(true);
       const res = await axiosInstance.get("countries");
       setCountryNames(res.data.response.map((c: Country) => c.name));
       setCountryToFlag(getCountryToFlag(res.data.response));
+      setIsLoadingCountries(false);
     } catch (_err) {
       const err = _err as AxiosError;
       if (err.response?.status == 403) {
@@ -109,6 +116,7 @@ const App = () => {
 
   const handleCountrySubmit = async (country: string) => {
     try {
+      setIsLoadingLeagues(true);
       const res = await axiosInstance.get("leagues", {
         params: {
           country: country,
@@ -119,6 +127,7 @@ const App = () => {
       setLeagueNames(leagues.map((l: League) => l.name));
       setLeagueToYears(getLeagueToSeasonYears(res.data.response));
       setLeagueToId(getLeagueToId(res.data.response));
+      setIsLoadingLeagues(false);
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -131,6 +140,7 @@ const App = () => {
 
   const handleSeasonSubmit = async (year: string) => {
     try {
+      setIsLoadingTeams(true);
       const res = await axiosInstance.get("teams", {
         params: {
           country: selectedCountry,
@@ -141,6 +151,7 @@ const App = () => {
       setSelectedYear(parseInt(year));
       setTeamNames(res.data.response.map((x: TeamDetail) => x.team.name));
       setTeamNameToId(getTeamNameToId(res.data.response));
+      setIsLoadingTeams(false);
     } catch (err) {
       handleAPIError(err as AxiosError);
     }
@@ -155,6 +166,7 @@ const App = () => {
           season: selectedYear,
         },
       });
+      setSelectedTeam(res.data.parameters.team);
       setPlayers(res.data.response.map((x: { player: Player; statistics: object }) => x.player));
     } catch (err) {
       handleAPIError(err as AxiosError);
@@ -181,6 +193,10 @@ const App = () => {
     fetchCountries();
   };
 
+  const getTeamLogoUrl = () => {
+    return `https://media.api-sports.io/football/teams/${selectedTeam}.png`;
+  };
+
   return (
     <>
       <h1>API-Football</h1>
@@ -200,6 +216,7 @@ const App = () => {
           handleSubmit={handleCountrySubmit}
           selectId="countrySelect"
           disabled={!countryNames.length}
+          isLoading={isLoadingCountries}
         />
         <SelectBox
           options={leagueNames}
@@ -207,6 +224,7 @@ const App = () => {
           handleSubmit={handleLeagueSubmit}
           selectId="leagueSelect"
           disabled={!leagueNames.length}
+          isLoading={isLoadingLeagues}
         />
         <SelectBox
           options={seasonYears}
@@ -214,6 +232,7 @@ const App = () => {
           handleSubmit={handleSeasonSubmit}
           selectId="seasonSelect"
           disabled={!seasonYears.length}
+          isLoading={false}
         />
         <SelectBox
           options={teamNames}
@@ -221,6 +240,7 @@ const App = () => {
           handleSubmit={handleTeamSubmit}
           selectId="teamSelect"
           disabled={!teamNames.length}
+          isLoading={isLoadingTeams}
         />
       </div>
       <div style={{ display: "flex", gap: "30px", justifyContent: "center" }}>
@@ -230,6 +250,7 @@ const App = () => {
           ) : null}
         </span>
         <span>
+          {selectedTeam ? <TeamLogo logoUrl={getTeamLogoUrl()} /> : null}
           {fixtures ? <WinLossTable fixtures={fixtures} /> : null}
           {mostUsedFormation ? <MostUsedFormation formation={mostUsedFormation} /> : null}
           {goalsFor ? <GoalsChart data={goalsFor.minute} /> : null}
