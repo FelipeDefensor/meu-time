@@ -53,11 +53,64 @@ describe("App Component", () => {
     await page.fill('input[name="apiKey"]', 'mockpasswd');
     await page.click('text=Entrar');
 
-    page.pause()
+    await page.waitForResponse(response => response.status() === 200);
+
+    const countrySelect = await page.$("#countrySelect");
+    expect(countrySelect).toBeTruthy();
+  });
+
+  test("select boxes are disabled until previous choice is made", async () => {
+    const apiKeyInput = await page.isVisible('input[name="apiKey"]');
+    expect(apiKeyInput).toBeTruthy();
+
+    await page.fill('input[name="apiKey"]', 'mockpasswd');
+    await page.click('text=Entrar');
 
     await page.waitForResponse(response => response.status() === 200);
 
     const countrySelect = await page.$("#countrySelect");
     expect(countrySelect).toBeTruthy();
+
+    // league select box must be disabled until a country is selected
+    const leagueSelect = await page.$("#leagueSelect");
+    let isLeagueDisabled = await leagueSelect!.isDisabled();
+    expect(isLeagueDisabled).toBe(true);
+
+    // select a country
+    await countrySelect?.selectOption('Brazil');
+    await page.waitForResponse(response => response.status() === 200);
+
+    // league select box must now be enabled
+    isLeagueDisabled = await leagueSelect!.isDisabled();
+    expect(isLeagueDisabled).toBe(false);
+
+
+    // season select box must be disabled until a league is selected
+    const seasonSelect = await page.$("#seasonSelect");
+    let isSeasonDisabled = await seasonSelect!.isDisabled();
+    expect(isSeasonDisabled).toBe(true);
+
+    // select a league
+    await leagueSelect?.selectOption('Serie A');
+    // seasons are already in state, no need to wait for response
+
+    // season select box must now be enabled
+    isSeasonDisabled = await seasonSelect!.isDisabled();
+    expect(isSeasonDisabled).toBe(false);
+
+
+    // team select box must be disabled until a league is selected
+    const teamSelect = await page.$("#teamSelect");
+    let isTeamDisabled = await teamSelect!.isDisabled();
+    expect(isTeamDisabled).toBe(true);
+
+    // select a league
+    await seasonSelect?.selectOption('2023');
+    await page.waitForResponse(response => response.status() === 200);
+
+    // team select box must now be enabled
+    isTeamDisabled = await teamSelect!.isDisabled();
+    expect(isTeamDisabled).toBe(false);
+
   });
 });
