@@ -6,7 +6,7 @@ Meu Time é uma aplicação [React](https://reactjs.org/), inicializada utilizan
 
 Para rodar o projeto, você precisa ter o [Node.js](https://nodejs.org) e um gerenciador de pacotes como o [npm](https://www.npmjs.com/) instalado. Para acessar os dados da API-Football, é necessário [ter uma conta](https://dashboard.api-football.com/register).
 
-## Instalação e execução
+## Instalação e execução em ambiente de desenvolvimento
 
 Navegue até a pasta do projeto:
 
@@ -26,11 +26,27 @@ Após instalar todas as dependências, execute o seguinte comando para iniciar a
 npm run dev
 ```
 
-O aplicativo será inicializado e você poderá acessá-lo no seu navegador através do endereço: [http://localhost:5173](http://localhost:5173).
+O aplicativo será inicializado e você poderá acessá-lo no seu navegador através do endereço: [http://localhost:5173](http://localhost:5173). Note que, em mode de desenvolvimento, o a aplicação utilizará dados de teste para evitar a cobrança de requisições à Football-API. Para utilizar dados reais, monte a aplicação com as instruções abaixo.
+
+## Execução em ambiente de produção
+
+Primeiro, monte a aplicação com:
+
+```
+npm run build
+```
+
+Agora é possível rodar um servidor já com as configurações de produção com o comando:
+
+```
+vite preview
+```
+
+Nele, o aplicativo já está otimizado para produção. Serão feitas requisições reais à Football-API e os dados recebidos serão exibidos. Para mais informações sobre o processo, consulte a documentação do [Vitest](https://vitejs.dev/guide/build.html).
 
 ## Testes
 
-Para executar os testes usando o `vitest`, inicie um servidor `vite` na porta 3000 com:
+Para executar os testes usando o `vitest`, inicie um servidor com `vite` na porta 3000:
 
 ```
 vite --port 3000
@@ -41,13 +57,3 @@ Então, rode os testes com o comando:
 ```
 npm run test
 ```
-
-## Build
-
-Para criar uma versão otimizada do projeto para produção, execute o seguinte comando:
-
-```
-npm run build
-```
-
-Isso irá criar uma pasta "dist", que conterá os arquivos otimizados para serem servidos em um ambiente de produção. Para mais informações sobre o processo, consulte a documentação do [Vitest](https://vitejs.dev/guide/build.html).
